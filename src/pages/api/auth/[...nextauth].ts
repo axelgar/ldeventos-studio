@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
@@ -8,7 +8,7 @@ const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
 // TODO: review issue found on prisma-adapter => https://github.com/nextauthjs/next-auth/issues/4495
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     EmailProvider({
@@ -54,9 +54,11 @@ export default NextAuth({
     },
   },
   theme: {
-    colorScheme: 'auto',
-    brandColor: '',
-    logo: 'https://logos-world.net/wp-content/uploads/2021/10/Sonic-Logo.png',
+    colorScheme: 'light',
+    brandColor: 'FA4D62',
+    logo: 'https://www.ldeventos.com/wp-content/uploads/2014/07/logo-LD_3.png',
     buttonText: '',
   },
-});
+};
+
+export default NextAuth(authOptions);

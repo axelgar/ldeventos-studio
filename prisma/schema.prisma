@@ -11,45 +11,93 @@ datasource db {
 enum Role {
   ADMIN
   MEMBER
-  EVENT_MEMBER
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          Role      @default(MEMBER)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  role          Role          @default(MEMBER)
   accounts      Account[]
   sessions      Session[]
-  event         Event?    @relation(fields: [eventId], references: [id])
-  eventId       String?
+  userOnEvents  UserOnEvent[]
 
   @@map("users")
 }
 
+model EventRole {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  userOnEvents      UserOnEvent[]
+  permissionsOnRole PermissionOnRole[]
+
+  @@map("event-roles")
+}
+
+model Permission {
+  id                String             @id @default(cuid())
+  name              String // editCalendar
+  description       String // Edit calendar
+  permissionOnRoles PermissionOnRole[]
+
+  @@map("permissions")
+}
+
+model PermissionOnRole {
+  eventRole    EventRole  @relation(fields: [eventRoleId], references: [id], onDelete: Cascade)
+  eventRoleId  String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  permissionId String
+
+  @@id([eventRoleId, permissionId])
+  @@unique([eventRoleId, permissionId])
+  @@index([permissionId])
+  @@map("permission-on-roles")
+}
+
+model UserOnEvent {
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     String
+  assignedAt  DateTime  @default(now())
+  assignedBy  String
+  eventRole   EventRole? @relation(fields: [eventRoleId], references: [id])
+  eventRoleId String?
+
+  @@id([userId, eventId])
+  @@unique([userId, eventId])
+  @@index([eventId])
+  @@index([eventRoleId])
+  @@map("users-on-events")
+}
+
 model EventType {
-  id    String  @id @default(cuid())
-  name  String?
-  Event Event[]
+  id     String  @id @default(cuid())
+  name   String // Concert, Brand event, Sport
+  events Event[]
 
   @@map("event-types")
 }
 
 model Event {
-  id        String    @id @default(cuid())
-  name      String
-  logo      String?
-  subdomain String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  User      User[]
-  type      EventType @relation(fields: [typeId], references: [id])
-  typeId    String
+  id           String        @id @default(cuid())
+  name         String
+  logo         String?
+  subdomain    String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  type         EventType     @relation(fields: [typeId], references: [id])
+  typeId       String
+  userOnEvents UserOnEvent[]
 
+  @@index([typeId])
   @@map("events")
 }
 
