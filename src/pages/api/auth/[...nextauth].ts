@@ -16,6 +16,9 @@ export const authOptions: NextAuthOptions = {
       from: process.env.EMAIL_FROM,
     }),
   ],
+  session: {
+    strategy: 'jwt',
+  },
   cookies: {
     sessionToken: {
       name: `${VERCEL_DEPLOYMENT ? '__Secure-' : ''}next-auth.session-token`,
@@ -41,16 +44,18 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
     },
-    session: ({ session, user }) => {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: user.id,
-          studioId: user.eventId,
-          role: user.role,
-        },
-      };
+    async session({ session, token }) {
+      // @ts-ignore
+      session.user.id = token.user.id;
+      // @ts-ignore
+      session.user.role = token.user.role;
+      // @ts-ignore
+      session.user.eventId = token.user.eventId;
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (!token.user) token.user = user;
+      return token;
     },
   },
   theme: {

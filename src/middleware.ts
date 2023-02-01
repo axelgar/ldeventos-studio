@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { withAuth, NextRequestWithAuth } from 'next-auth/middleware';
 
 export const config = {
   matcher: [
@@ -17,21 +18,28 @@ export const config = {
 const PROD_DOMAIN = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
 const LOCAL_DOMAIN = `${process.env.NEXT_PUBLIC_COOKIE_DOMAIN}:3000`;
 
-export default async function middleware(req: NextRequest) {
-  const url = req.nextUrl;
-  const hostname = req.headers.get('host') || 'demo.vercel.pub';
-  const path = url.pathname;
+// export default function middleware
 
-  const studioSubdomain =
-    process.env.NODE_ENV === 'production' && process.env.VERCEL === '1'
-      ? hostname.replace(`.${PROD_DOMAIN}`, '')
-      : hostname.replace(`.${LOCAL_DOMAIN}`, '');
+export default withAuth(
+  (req: NextRequestWithAuth) => {
+    const url = req.nextUrl;
+    const hostname = req.headers.get('host') || 'demo.vercel.pub';
+    const path = url.pathname;
 
-  // rewrite root application to `/home` folder
-  if (hostname === LOCAL_DOMAIN || hostname === PROD_DOMAIN) {
-    return NextResponse.rewrite(new URL(`/home${path}`, req.url));
+    const studioSubdomain =
+      process.env.NODE_ENV === 'production' && process.env.VERCEL === '1'
+        ? hostname.replace(`.${PROD_DOMAIN}`, '')
+        : hostname.replace(`.${LOCAL_DOMAIN}`, '');
+
+    // rewrite root application to `/home` folder
+    if (hostname === LOCAL_DOMAIN || hostname === PROD_DOMAIN) {
+      return NextResponse.rewrite(new URL(`/home${path}`, req.url));
+    }
+
+    // rewrite everything else to `/sites/[site] dynamic route
+    return NextResponse.rewrite(new URL(`/sites/${studioSubdomain}${path}`, req.url));
+  },
+  {
+    secret: process.env.NEXTAUTH_SECRET,
   }
-
-  // rewrite everything else to `/sites/[site] dynamic route
-  return NextResponse.rewrite(new URL(`/sites/${studioSubdomain}${path}`, req.url));
-}
+);
