@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { withAuth, NextRequestWithAuth } from 'next-auth/middleware';
+import { authOptions } from './pages/api/auth/[...nextauth]';
 
 export const config = {
   matcher: [
@@ -17,8 +18,6 @@ export const config = {
 
 const PROD_DOMAIN = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
 const LOCAL_DOMAIN = `${process.env.NEXT_PUBLIC_COOKIE_DOMAIN}:3000`;
-
-// export default function middleware
 
 export default withAuth(
   (req: NextRequestWithAuth) => {
@@ -40,6 +39,16 @@ export default withAuth(
     return NextResponse.rewrite(new URL(`/sites/${studioSubdomain}${path}`, req.url));
   },
   {
-    secret: process.env.NEXTAUTH_SECRET,
+    cookies: {
+      sessionToken: {
+        name: `${!!process.env.VERCEL_URL ? '__Secure-' : ''}next-auth.session-token`,
+      },
+    },
+    callbacks: {
+      authorized: async ({ token }) => {
+        console.log('authorized: ', token);
+        return !!token;
+      },
+    },
   }
 );
