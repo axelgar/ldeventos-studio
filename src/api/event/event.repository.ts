@@ -17,7 +17,18 @@ class EventRepository {
         select: { name: true, type: { select: { name: true } }, subdomain: true, logo: true },
       });
     } catch (error) {
-      throw new BadRequestException(`There was an error trying to get all events`);
+      throw new BadRequestException(`There was an error trying to get all events for userId: ${userId}`);
+    }
+  }
+
+  async getBySubdomain(subdomain: string) {
+    try {
+      return await prisma.event.findFirst({
+        where: { subdomain },
+        select: { name: true, logo: true, id: true, type: { select: { name: true } } },
+      });
+    } catch (error) {
+      throw new BadRequestException(`There was an error trying to get an event with subdomain: ${subdomain}`);
     }
   }
 }

@@ -7,6 +7,15 @@ class EventHandler {
     return await eventController.findAll();
   }
 
+  @Get('/:subdomain')
+  async getBySubdomain(@Param('subdomain') subdomain: string) {
+    const event = await eventController.getBySubdomain(subdomain);
+    if (!event) {
+      return new NotFoundException();
+    }
+    return event;
+  }
+
   @Get('/user/:userId')
   async findByUserId(@Param('userId') userId: string) {
     const events = await eventController.findByUserId(userId);

@@ -3,8 +3,7 @@ import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
 import { userController } from '@/api/user/user.controller';
-
-const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
+import { cookiesOptions } from '@/config';
 
 // TODO: review issue found on prisma-adapter => https://github.com/nextauthjs/next-auth/issues/4495
 
@@ -19,18 +18,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  cookies: {
-    sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? '__Secure-' : ''}next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
-        secure: VERCEL_DEPLOYMENT,
-      },
-    },
-  },
+  cookies: cookiesOptions,
   callbacks: {
     signIn: async ({ user }) => {
       if (!user.email) {
@@ -45,16 +33,17 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async session({ session, token }) {
-      // @ts-ignore
       session.user.id = token.user.id;
-      // @ts-ignore
       session.user.role = token.user.role;
-      // @ts-ignore
       session.user.eventId = token.user.eventId;
       return session;
     },
     async jwt({ token, user }) {
-      if (!token.user) token.user = user;
+      if (!token.user?.id && user) {
+        token.user.id = user.id;
+        token.user.eventId = user.eventId;
+        token.user.role = user.role;
+      }
       return token;
     },
   },

@@ -8,6 +8,9 @@ class EventController {
   async findByUserId(userId: string) {
     return eventRepository.findByUserId(userId);
   }
+  async getBySubdomain(subdomain: string) {
+    return eventRepository.getBySubdomain(subdomain);
+  }
 }
 
 export const eventController = new EventController();

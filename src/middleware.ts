@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { withAuth, NextRequestWithAuth } from 'next-auth/middleware';
-import { authOptions } from './pages/api/auth/[...nextauth]';
+import { cookiesOptions } from './config';
 
 export const config = {
   matcher: [
@@ -39,16 +39,6 @@ export default withAuth(
     return NextResponse.rewrite(new URL(`/sites/${studioSubdomain}${path}`, req.url));
   },
   {
-    cookies: {
-      sessionToken: {
-        name: `${!!process.env.VERCEL_URL ? '__Secure-' : ''}next-auth.session-token`,
-      },
-    },
-    callbacks: {
-      authorized: async ({ token }) => {
-        console.log('authorized: ', token);
-        return !!token;
-      },
-    },
+    cookies: cookiesOptions,
   }
 );
