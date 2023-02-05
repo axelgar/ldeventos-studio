@@ -59,7 +59,9 @@ export const StudioNavbar = () => {
                     <div>
                       <Menu.Button className="flex max-w-xs items-center rounded-full bg-orange-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-orange-800">
                         <span className="sr-only">Open user menu</span>
-                        <img className="h-8 w-8 rounded-full" src={session?.user.image || ''} alt="" />
+                        {session?.user.image && (
+                          <img className="h-8 w-8 rounded-full" src={session?.user.image || ''} alt="" />
+                        )}
                       </Menu.Button>
                     </div>
                     <Transition
@@ -141,7 +143,9 @@ export const StudioNavbar = () => {
             <div className="border-t border-orange-700 pt-4 pb-3">
               <div className="flex items-center px-5">
                 <div className="flex-shrink-0">
-                  <img className="h-10 w-10 rounded-full" src={session?.user.image || ''} alt="" />
+                  {session?.user.image && (
+                    <img className="h-10 w-10 rounded-full" src={session?.user.image || ''} alt="" />
+                  )}
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-white">{session?.user.name}</div>
