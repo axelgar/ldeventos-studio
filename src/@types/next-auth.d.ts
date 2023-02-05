@@ -14,11 +14,11 @@ declare module 'next-auth' {
 }
 
 declare module 'next-auth/jwt' {
-  interface JWT extends DefaultJWT {
+  interface JWT {
     user: {
       role: string;
       eventId: string;
       id: string;
-    } & DefaultJWT;
+    };
   }
 }
