@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       try {
-        await userController.findOneByEmail(user.email);
+        await userController.getOneByEmail(user.email);
         return Boolean(user);
       } catch (error) {
         return false;
@@ -35,7 +35,6 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.user.id = token.user.id;
       session.user.role = token.user.role;
-      session.user.eventId = token.user.eventId;
       return session;
     },
     async jwt({ token, user }) {
@@ -43,7 +42,7 @@ export const authOptions: NextAuthOptions = {
         token.user = {
           id: user.id,
           role: user.role,
-          eventId: user.eventId,
+          email: user.email,
         };
       }
       return token;

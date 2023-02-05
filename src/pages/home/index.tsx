@@ -6,19 +6,15 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
+import invariant from 'tiny-invariant';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
-  const userId = session?.user.id;
+  invariant(session);
+  const userId = session.user.id;
   const queryClient = new QueryClient();
   const endpoint = apiUrls.findEventsByUserId(userId);
-
-  if (!userId) {
-    return {
-      props: {},
-    };
-  }
 
   await queryClient.fetchQuery([endpoint], () => eventController.findByUserId(userId));
   return { props: { dehydratedState: dehydrate(queryClient) } };

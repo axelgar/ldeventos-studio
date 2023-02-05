@@ -5,14 +5,19 @@ import { eventController } from '@/api/event/event.controller';
 import { apiUrls } from '@/utils/api-urls';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useGetEventBySubdomain } from '@/hooks/useGetEventBySubdomain';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
+import invariant from 'tiny-invariant';
 
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+export async function getServerSideProps({ query, req, res }: GetServerSidePropsContext) {
+  const session = await getServerSession(req, res, authOptions);
+  invariant(session);
   const subdomain = query.subdomain as string;
   const queryClient = new QueryClient();
   const endpoint = apiUrls.getEventBySubdomain(subdomain);
 
   try {
-    await queryClient.fetchQuery([endpoint], () => eventController.getBySubdomain(subdomain));
+    await queryClient.fetchQuery([endpoint], () => eventController.getBySubdomain(subdomain, session.user.email));
     return { props: { dehydratedState: dehydrate(queryClient) } };
   } catch (error) {
     return {

@@ -1,4 +1,4 @@
-import { NotFoundException } from 'next-api-decorators/dist/exceptions';
+import { CreateUserDTO } from './user.dto';
 import { userRepository } from './user.repository';
 
 class UserController {
@@ -6,12 +6,12 @@ class UserController {
     return await userRepository.findAll();
   }
 
-  async findOneByEmail(email: string) {
-    const user = await userRepository.findOneByEmail(email);
-    if (!user) {
-      throw new NotFoundException(`User not found with email ${email}`);
-    }
-    return user;
+  async getOneByEmail(email: string) {
+    return await userRepository.getOneByEmail(email);
+  }
+
+  async createOne({ email, name, image, mobileNumber, role }: CreateUserDTO) {
+    return await userRepository.createOne({ email, name, image, mobileNumber, role });
   }
 }
 
