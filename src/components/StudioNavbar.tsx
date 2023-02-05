@@ -8,7 +8,7 @@ import { Fragment } from 'react';
 
 const navigation = [
   { name: 'Events', href: '/', pathname: INTERNAL_PREFIX },
-  { name: 'Team', href: '/team', pathname: INTERNAL_PREFIX + '/team' },
+  { name: 'Users', href: '/users', pathname: INTERNAL_PREFIX + '/users' },
   { name: 'Event types', href: '/event-types', pathname: INTERNAL_PREFIX + '/event-types' },
   { name: 'Event roles', href: '/event-roles', pathname: INTERNAL_PREFIX + '/event-roles' },
 ];

@@ -4,8 +4,23 @@ import { useFindAllUsers } from '@/hooks/useFindAllUsers';
 import { apiUrls } from '@/utils/api-urls';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSidePropsContext } from 'next';
+import { getServerSession } from 'next-auth';
+import invariant from 'tiny-invariant';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  invariant(session);
+
+  if (session.user.role === 'EXTERNAL') {
+    return {
+      redirect: {
+        permanent: false,
+        destination: process.env.NEXT_PUBLIC_APP_DOMAIN,
+      },
+    };
+  }
+
   const queryClient = new QueryClient();
   const endpoint = apiUrls.findAllUsers;
 
