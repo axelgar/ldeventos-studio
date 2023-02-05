@@ -11,6 +11,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/user/[[...params]]">
     | StaticRoute<"/home/add-event">
     | StaticRoute<"/home">
+    | StaticRoute<"/home/users/add-user">
     | StaticRoute<"/home/users">
     | StaticRoute<"/">
     | DynamicRoute<"/sites/[subdomain]", { "subdomain": string }>;

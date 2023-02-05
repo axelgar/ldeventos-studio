@@ -1,8 +1,8 @@
 import { userController } from '@/api/user/user.controller';
 import { CreateUserDTO } from '@/api/user/user.dto';
+import { Auth } from '@/api/utils/auth-middleware';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Body, createHandler, Get, Post, Req, Res, ValidationPipe } from 'next-api-decorators';
-import { Auth } from '../../../api/utils/auth-middleware';
 
 class UserHandler {
   @Get()

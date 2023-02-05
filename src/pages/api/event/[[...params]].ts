@@ -1,10 +1,10 @@
 import { eventController } from '@/api/event/event.controller';
+import { Auth } from '@/api/utils/auth-middleware';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createHandler, Get, NotFoundException, Param, Req, Res } from 'next-api-decorators';
 import { getServerSession } from 'next-auth';
 import invariant from 'tiny-invariant';
 import { authOptions } from '../auth/[...nextauth]';
-import { Auth } from '../../../api/utils/auth-middleware';
 
 class EventHandler {
   @Get()

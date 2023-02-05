@@ -8,6 +8,7 @@ class UserRepository {
       return prisma.user.findMany({
         select: {
           name: true,
+          email: true,
           image: true,
           role: true,
           _count: true,
