@@ -1,5 +1,5 @@
 export const apiUrls = {
-  findAllUsers: `/user`,
-  getEventBySubdomain: (subdomain: string) => `/event/${subdomain}`,
-  findEventsByUserId: (userId?: string) => `/event/user/${userId}`,
+  findAllUsers: `/api/user`,
+  getEventBySubdomain: (subdomain: string) => `/api/event/${subdomain}`,
+  findEventsByUserId: (userId?: string) => `/api/event/user/${userId}`,
 };
