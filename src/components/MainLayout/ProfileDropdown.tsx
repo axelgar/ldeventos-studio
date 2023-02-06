@@ -2,20 +2,13 @@ import { classNames } from '@/utils/classnames';
 import { Menu, Transition } from '@headlessui/react';
 import { useSession } from 'next-auth/react';
 import { Fragment } from 'react';
+import { AvatarPlaceholder } from '../AvatarPlaceholder';
 
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ];
-
-const AvatarPlaceholder = () => (
-  <span className="inline-block h-8 w-8 overflow-hidden rounded-full bg-gray-100">
-    <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-    </svg>
-  </span>
-);
 
 export const ProfileDropdown = () => {
   const { data: session } = useSession();
@@ -28,7 +21,7 @@ export const ProfileDropdown = () => {
           {session?.user.image ? (
             <img className="h-8 w-8 rounded-full" src={session?.user.image} alt="" />
           ) : (
-            <AvatarPlaceholder />
+            <AvatarPlaceholder size="s" />
           )}
         </Menu.Button>
       </div>

@@ -11,6 +11,7 @@ class UserRepository {
           email: true,
           image: true,
           role: true,
+          mobileNumber: true,
           _count: true,
           userOnEvents: { select: { event: { select: { name: true, logo: true } } } },
         },

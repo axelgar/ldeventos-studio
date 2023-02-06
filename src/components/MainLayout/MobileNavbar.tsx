@@ -1,6 +1,8 @@
+import { ArrayElement } from '@/utils/array-elements';
 import { classNames } from '@/utils/classnames';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { NextRouter, useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { navigation } from './utils';
 
@@ -9,7 +11,12 @@ type Props = {
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const isCurrent = (item: ArrayElement<typeof navigation>, router: NextRouter) => {
+  return item.children.map((subItem) => subItem.pathname.includes(router.pathname));
+};
+
 export const MobileNavbar = ({ sidebarOpen, setSidebarOpen }: Props) => {
+  const router = useRouter();
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
       <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
@@ -73,7 +80,7 @@ export const MobileNavbar = ({ sidebarOpen, setSidebarOpen }: Props) => {
                           <a
                             href={'#'}
                             className={classNames(
-                              item.current
+                              isCurrent(item, router)
                                 ? 'bg-orange-900 text-white'
                                 : 'bg-orange-100 text-orange-600 hover:bg-orange-50 hover:text-white',
                               'group flex w-full items-center rounded-md py-2 pl-2 text-sm font-medium'
@@ -81,7 +88,7 @@ export const MobileNavbar = ({ sidebarOpen, setSidebarOpen }: Props) => {
                           >
                             <item.icon
                               className={classNames(
-                                item.current ? 'text-white' : 'text-white group-hover:text-orange-400',
+                                isCurrent(item, router) ? 'text-white' : 'text-white group-hover:text-orange-400',
                                 'mr-3 h-6 w-6 flex-shrink-0'
                               )}
                               aria-hidden="true"
@@ -95,7 +102,7 @@ export const MobileNavbar = ({ sidebarOpen, setSidebarOpen }: Props) => {
                             <>
                               <Disclosure.Button
                                 className={classNames(
-                                  item.current
+                                  isCurrent(item, router)
                                     ? 'bg-orange-100 text-white'
                                     : 'bg-orange-700 text-white hover:bg-orange-50 hover:text-gray-900',
                                   'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500'
