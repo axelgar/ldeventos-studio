@@ -1,18 +1,19 @@
 import { BadRequestException } from 'next-api-decorators';
+import { User } from '@prisma/client';
 import { prisma } from '../../lib/prisma';
-import { CreateUserDTO } from './user.dto';
+import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 
 class UserRepository {
   async findAll() {
     try {
       return prisma.user.findMany({
         select: {
+          id: true,
           name: true,
           email: true,
           image: true,
           role: true,
           mobileNumber: true,
-          _count: true,
           userOnEvents: { select: { event: { select: { name: true, logo: true } } } },
         },
       });
@@ -28,8 +29,17 @@ class UserRepository {
     });
   }
 
-  async createOne(data: CreateUserDTO) {
-    return prisma.user.create({ data });
+  async createOne({ email, name, image, mobileNumber, role }: CreateUserDTO) {
+    return prisma.user.create({ data: { email, name, image, mobileNumber, role } });
+  }
+
+  async updateOneById({ id, name, email, image, role, mobileNumber }: UpdateUserDTO) {
+    return prisma.user.update({ where: { id }, data: { name, email, image, role, mobileNumber } });
+  }
+
+  async deleteOneById(id: User['id']) {
+    'Repository delete';
+    return prisma.user.delete({ where: { id } });
   }
 }
 

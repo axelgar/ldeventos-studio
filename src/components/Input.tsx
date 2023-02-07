@@ -22,7 +22,7 @@ export const Input = ({ errors, label, id, name, autoComplete, ...props }: Props
         className={
           errors[name]
             ? 'block w-full rounded-md border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm'
-            : 'block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm'
+            : 'block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-300 focus:ring-orange-300 sm:text-sm'
         }
         aria-invalid={!!errors[name]}
         aria-describedby={errors[name] ? `${name}-error` : ''}

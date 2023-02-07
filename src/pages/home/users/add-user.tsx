@@ -6,19 +6,8 @@ import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import invariant from 'tiny-invariant';
 import { CreateUserDTO } from '@/api/user/user.dto';
-import { Role } from '@prisma/client';
-import * as yup from 'yup';
 import { Input } from '@/components/Input';
-
-const CreateUserSchema = yup.object().shape({
-  name: yup.string().min(2, 'Name too short').max(50, 'Name too long').required('Name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  role: yup.mixed<Role>().oneOf(Object.values(Role)),
-  image: yup.mixed(),
-  // .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
-  // .test('fileFormat', 'Unsupported Format', (value) => value && SUPPORTED_FORMATS.includes(value.type)),
-  mobileNumber: yup.string().min(2, 'Mobile number too short').max(15, 'Mobile number too long'),
-});
+import { CreateUserSchema } from '@/utils/form-schemas/create-user-schema';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -37,14 +26,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Team() {
-  const { mutate: createUser } = useCreateOne({ onSuccess: console.log });
+  const { mutate: createUser, isLoading } = useCreateOne();
+
   return (
     <MainLayout title="Add user">
       <Formik
         initialValues={{ email: '', name: '', mobileNumber: '', role: 'EXTERNAL', image: '' } as CreateUserDTO}
         validationSchema={CreateUserSchema}
-        onSubmit={async (values) => {
-          await createUser(values);
+        onSubmit={(values, { resetForm }) => {
+          createUser(values, { onSuccess: () => resetForm() });
         }}
       >
         {({ errors }) => (
@@ -57,6 +47,7 @@ export default function Team() {
                   type="email"
                   autoComplete="email"
                   label="Email address"
+                  disabled={isLoading}
                   errors={errors}
                 />
                 <Input id="name" name="name" type="text" autoComplete="name" label="Name" errors={errors} />
@@ -66,6 +57,7 @@ export default function Team() {
                   type="text"
                   autoComplete="mobileNumber"
                   label="Mobile phone number"
+                  disabled={isLoading}
                   errors={errors}
                 />
 
@@ -78,10 +70,11 @@ export default function Team() {
                       id="role"
                       name="role"
                       as="select"
+                      disabled={isLoading}
                       className={
                         errors.role
                           ? 'block w-full rounded-md border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm'
-                          : 'block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm'
+                          : 'block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-300 focus:ring-orange-300 sm:text-sm'
                       }
                     >
                       <option value="EXTERNAL">External</option>
@@ -112,6 +105,7 @@ export default function Team() {
                       id="image"
                       name="image"
                       type="file"
+                      disabled={isLoading}
                       className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                     />
                   </div>
@@ -130,6 +124,7 @@ export default function Team() {
               <div className="flex justify-end">
                 <button
                   type="submit"
+                  disabled={isLoading}
                   className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-orange-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                 >
                   Add

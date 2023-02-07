@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ApiClient } from './lib/ApiClient';
+import { ApiClient } from './lib/api-client';
 
 class Store {
   apiClient: ApiClient;

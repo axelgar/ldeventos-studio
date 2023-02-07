@@ -1,4 +1,6 @@
-import { CreateUserDTO } from './user.dto';
+import { User } from '@prisma/client';
+import { BadRequestException } from 'next-api-decorators';
+import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { userRepository } from './user.repository';
 
 class UserController {
@@ -6,12 +8,25 @@ class UserController {
     return await userRepository.findAll();
   }
 
-  async getOneByEmail(email: string) {
+  async getOneByEmail(email: User['email']) {
     return await userRepository.getOneByEmail(email);
   }
 
-  async createOne({ email, name, image, mobileNumber, role }: CreateUserDTO) {
-    return await userRepository.createOne({ email, name, image, mobileNumber, role });
+  async createOne(data: CreateUserDTO) {
+    return await userRepository.createOne(data);
+  }
+
+  async updateOneById(data: UpdateUserDTO) {
+    return await userRepository.updateOneById(data);
+  }
+
+  async deleteOneById(id: User['id']) {
+    try {
+      userRepository.deleteOneById(id);
+      return { message: 'User successfully deleted' };
+    } catch (error) {
+      throw new BadRequestException(`There was an error trying to delete this user ${id}`);
+    }
   }
 }
 

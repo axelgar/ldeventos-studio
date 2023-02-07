@@ -1,14 +1,17 @@
-import { userController } from '@/api/user/user.controller';
-import { AvatarPlaceholder } from '@/components/AvatarPlaceholder';
-import MainLayout from '@/components/MainLayout';
-import { RolesBudge } from '@/components/RoleBudge';
-import { useFindAllUsers } from '@/hooks/useFindAllUsers';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { apiUrls } from '@/utils/api-urls';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import invariant from 'tiny-invariant';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { userController } from '@/api/user/user.controller';
+import { AvatarPlaceholder } from '@/components/AvatarPlaceholder';
+import { DeleteUserModal } from '@/components/DeleteUserModal';
+import MainLayout from '@/components/MainLayout';
+import { RolesBudge } from '@/components/RoleBudge';
+import { UserOptionsDropdown } from '@/components/UserOptionsDropdown';
+import { useFindAllUsers } from '@/hooks/useFindAllUsers';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { apiUrls } from '@/utils/api-urls';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -30,7 +33,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: { dehydratedState: dehydrate(queryClient) } };
 }
 
-export default function Team() {
+export default function Users() {
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { data: users } = useFindAllUsers();
 
   return (
@@ -67,10 +71,16 @@ export default function Team() {
                       <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                         Mobile
                       </th>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell md:hidden lg:table-cell"
+                      >
                         Nº Projects
                       </th>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell md:hidden lg:table-cell"
+                      >
                         Role
                       </th>
                       <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -97,19 +107,17 @@ export default function Team() {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {/* <div className="text-gray-900">{user.title}</div> */}
                           <div className="text-gray-500">{user.mobileNumber}</div>
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell md:hidden lg:table-cell">
                           {user.userOnEvents.length}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell md:hidden lg:table-cell">
                           <RolesBudge>{user.role}</RolesBudge>
                         </td>
-                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <a href="#" className="text-orange-600 hover:text-orange-900">
-                            Edit<span className="sr-only">, {user.name}</span>
-                          </a>
+                        <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                          <UserOptionsDropdown setOpenDeleteModal={setOpenDeleteModal} />
+                          <DeleteUserModal id={user.id} open={openDeleteModal} setOpen={setOpenDeleteModal} />
                         </td>
                       </tr>
                     ))}
