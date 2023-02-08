@@ -1,5 +1,5 @@
 type Request = {
-  endpoint?: string;
+  endpoint: string;
 } & RequestInit;
 
 export class ApiClient {

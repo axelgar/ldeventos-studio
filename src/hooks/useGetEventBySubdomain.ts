@@ -1,5 +1,5 @@
 import { useApiClient } from '@/Store';
-import { apiUrls } from '@/utils/api-urls';
+import { apiCalls } from '@/utils/api-calls';
 import { useQuery, UseQueryOptions, QueryFunction } from '@tanstack/react-query';
 import { eventController } from '../api/event/event.controller';
 
@@ -8,9 +8,10 @@ type QueryOptions = UseQueryOptions<unknown, unknown, Data, string[]>;
 
 export const useGetEventBySubdomain = (subdomain: string, options?: QueryOptions) => {
   const apiClient = useApiClient();
-  const endpoint = apiUrls.getEventBySubdomain(subdomain);
-  const queryFn: QueryFunction = ({ signal }) => apiClient.request<Data>({ endpoint, signal });
-  return useQuery([endpoint], queryFn, {
+  const { endpoint: getEndpoint, method } = apiCalls.getEventBySubdomain;
+  const endpoint = getEndpoint(subdomain);
+  const queryFn: QueryFunction = ({ signal }) => apiClient.request<Data>({ endpoint, method, signal });
+  return useQuery([endpoint, method], queryFn, {
     ...options,
     enabled: !!subdomain,
   });

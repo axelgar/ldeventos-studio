@@ -1,14 +1,10 @@
 import { classNames } from '@/utils/classnames';
 import { Menu, Transition } from '@headlessui/react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { Fragment } from 'react';
 import { AvatarPlaceholder } from '../AvatarPlaceholder';
 
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-];
+const userNavigation = [{ name: 'Your Profile', href: '#' }];
 
 export const ProfileDropdown = () => {
   const { data: session } = useSession();
@@ -47,6 +43,19 @@ export const ProfileDropdown = () => {
               )}
             </Menu.Item>
           ))}
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                onClick={() => signOut()}
+                className={classNames(
+                  active ? 'bg-gray-100' : '',
+                  'block w-full px-4 py-2 text-start text-sm text-gray-700'
+                )}
+              >
+                Sign out
+              </button>
+            )}
+          </Menu.Item>
         </Menu.Items>
       </Transition>
     </Menu>

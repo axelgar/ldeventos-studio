@@ -1,7 +1,7 @@
 import { eventController } from '@/api/event/event.controller';
 import MainLayout from '@/components/MainLayout';
 import { useFindEventsByUserId } from '@/hooks/useFindEventsByUserId';
-import { apiUrls } from '@/utils/api-urls';
+import { apiCalls } from '@/utils/api-calls';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
@@ -14,9 +14,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   invariant(session);
   const userId = session.user.id;
   const queryClient = new QueryClient();
-  const endpoint = apiUrls.findEventsByUserId(userId);
-
-  await queryClient.fetchQuery([endpoint], () => eventController.findByUserId(userId));
+  const { endpoint: getEndpoint, method } = apiCalls.findEventsByUserId;
+  const endpoint = getEndpoint(userId);
+  await queryClient.fetchQuery([endpoint, method], () => eventController.findByUserId(userId));
   return { props: { dehydratedState: dehydrate(queryClient) } };
 }
 

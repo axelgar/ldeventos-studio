@@ -11,7 +11,7 @@ import { RolesBudge } from '@/components/RoleBudge';
 import { UserOptionsDropdown } from '@/components/UserOptionsDropdown';
 import { useFindAllUsers } from '@/hooks/useFindAllUsers';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { apiUrls } from '@/utils/api-urls';
+import { apiCalls } from '@/utils/api-calls';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -27,9 +27,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const queryClient = new QueryClient();
-  const endpoint = apiUrls.findAllUsers;
+  const { endpoint, method } = apiCalls.findAllUsers;
 
-  await queryClient.fetchQuery([endpoint], () => userController.findAll());
+  await queryClient.fetchQuery([endpoint, method], () => userController.findAll());
   return { props: { dehydratedState: dehydrate(queryClient) } };
 }
 

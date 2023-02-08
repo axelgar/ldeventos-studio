@@ -1,16 +1,19 @@
 import { userController } from '@/api/user/user.controller';
 import { useApiClient } from '@/Store';
-import { apiUrls } from '@/utils/api-urls';
+import { apiCalls } from '@/utils/api-calls';
 import { useQuery, UseQueryOptions, QueryFunction } from '@tanstack/react-query';
 
 type Data = Awaited<ReturnType<typeof userController.findAll>>;
-type QueryOptions = UseQueryOptions<unknown, unknown, Data, string[]>;
+type QueryOptions = UseQueryOptions<
+  unknown,
+  unknown,
+  Data,
+  (typeof apiCalls.findAllUsers.endpoint | typeof apiCalls.findAllUsers.method)[]
+>;
 
 export const useFindAllUsers = (options?: QueryOptions) => {
   const apiClient = useApiClient();
-  const endpoint = apiUrls.findAllUsers;
-  const queryFn: QueryFunction = ({ signal }) => apiClient.request<Data>({ endpoint, signal });
-  return useQuery([endpoint], queryFn, {
-    ...options,
-  });
+  const { endpoint, method } = apiCalls.findAllUsers;
+  const queryFn: QueryFunction = ({ signal }) => apiClient.request<Data>({ endpoint, method, signal });
+  return useQuery([endpoint, method], queryFn, options);
 };
