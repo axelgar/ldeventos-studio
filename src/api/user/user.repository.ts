@@ -22,6 +22,20 @@ class UserRepository {
     }
   }
 
+  async getOneById(id: string) {
+    return prisma.user.findFirstOrThrow({
+      where: { id },
+      select: {
+        email: true,
+        name: true,
+        role: true,
+        image: true,
+        mobileNumber: true,
+        userOnEvents: { select: { event: { select: { id: true } } } },
+      },
+    });
+  }
+
   async getOneByEmail(email: string) {
     return prisma.user.findFirstOrThrow({
       where: { email },
@@ -29,8 +43,8 @@ class UserRepository {
     });
   }
 
-  async createOne({ email, name, image, mobileNumber, role }: CreateUserDTO) {
-    return prisma.user.create({ data: { email, name, image, mobileNumber, role } });
+  async createOne({ email, name, mobileNumber, role }: CreateUserDTO) {
+    return prisma.user.create({ data: { email, name, mobileNumber, role } });
   }
 
   async updateOneById({ id, name, email, image, role, mobileNumber }: UpdateUserDTO) {

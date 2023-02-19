@@ -15,7 +15,7 @@ export const ProfileDropdown = () => {
         <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
           <span className="sr-only">Open user menu</span>
           {session?.user.image ? (
-            <img className="h-8 w-8 rounded-full" src={session?.user.image} alt="" />
+            <img className="h-8 w-8 rounded-full object-cover" src={session?.user.image} alt="" />
           ) : (
             <AvatarPlaceholder size="s" />
           )}

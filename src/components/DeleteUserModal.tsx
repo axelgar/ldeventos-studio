@@ -8,7 +8,6 @@ type Props = { id: string; open: boolean; setOpen: Dispatch<SetStateAction<boole
 export const DeleteUserModal = ({ id, open = true, setOpen }: Props) => {
   const { mutate: deleteUser, isLoading } = useDeleteUserById(id, {
     onSuccess: () => setOpen(false),
-    onError: console.log,
   });
 
   const handleOnClickDelete = () => {

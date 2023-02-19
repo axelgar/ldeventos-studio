@@ -11,6 +11,12 @@ class UserHandler {
     return await userController.findAll();
   }
 
+  @Get('/:id')
+  @Auth('ADMIN', 'MEMBER')()
+  async getOneById(@Param('id') id: User['id']) {
+    return await userController.getOneById(id);
+  }
+
   @Post()
   @Auth('ADMIN')()
   async createOne(@Body(ValidationPipe) newUser: CreateUserDTO) {

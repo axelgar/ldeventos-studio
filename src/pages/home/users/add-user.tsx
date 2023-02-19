@@ -7,7 +7,7 @@ import { getServerSession } from 'next-auth';
 import invariant from 'tiny-invariant';
 import { CreateUserDTO } from '@/api/user/user.dto';
 import { Input } from '@/components/Input';
-import { CreateUserSchema } from '@/utils/form-schemas/create-user-schema';
+import { UserSchema } from '@/utils/form-schemas/user-schema';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -32,7 +32,7 @@ export default function Team() {
     <MainLayout title="Add user">
       <Formik
         initialValues={{ email: '', name: '', mobileNumber: '', role: 'EXTERNAL', image: '' } as CreateUserDTO}
-        validationSchema={CreateUserSchema}
+        validationSchema={UserSchema}
         onSubmit={(values, { resetForm }) => {
           createUser(values, { onSuccess: () => resetForm() });
         }}
@@ -83,33 +83,6 @@ export default function Team() {
                     </Field>
                   </div>
                   <ErrorMessage name="role">
-                    {(message) => (
-                      <p className="mt-2 text-sm text-red-600" id="email-error">
-                        {message}
-                      </p>
-                    )}
-                  </ErrorMessage>
-                </div>
-
-                <div className="sm:col-span-6">
-                  <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                    Photo
-                  </label>
-                  <div className="mt-1 flex items-center">
-                    <span className="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                      <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                      </svg>
-                    </span>
-                    <Field
-                      id="image"
-                      name="image"
-                      type="file"
-                      disabled={isLoading}
-                      className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                    />
-                  </div>
-                  <ErrorMessage name="image">
                     {(message) => (
                       <p className="mt-2 text-sm text-red-600" id="email-error">
                         {message}

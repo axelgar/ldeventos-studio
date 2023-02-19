@@ -9,7 +9,6 @@ export class CreateUserDTO {
   name!: User['name'];
 
   role?: User['role'];
-  image?: string;
   mobileNumber?: User['mobileNumber'];
 }
 
@@ -17,8 +16,8 @@ export class UpdateUserDTO {
   @IsNotEmpty()
   id!: User['id'];
 
-  email!: User['email'];
-  name!: User['name'];
+  email?: User['email'];
+  name?: User['name'];
   role?: User['role'];
   image?: string;
   mobileNumber?: User['mobileNumber'];

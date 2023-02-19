@@ -5,12 +5,15 @@ import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react
 
 type Data = Awaited<ReturnType<typeof userController.deleteOneById>>;
 
+const { endpoint: findAllUsersEndpoint, method: findAllUsersMethod } = apiCalls.findAllUsers;
+const { endpoint, method } = apiCalls.deleteUserById;
+
 export const useDeleteUserById = (userId: string, options?: UseMutationOptions) => {
   const queryClient = useQueryClient();
   const apiClient = useApiClient();
-  const { endpoint, method } = apiCalls.deleteUserById;
-  const { endpoint: findAllUsersEndpoint, method: findAllUsersMethod } = apiCalls.findAllUsers;
+
   const mutationFn = () => apiClient.request<Data>({ endpoint: endpoint(userId), method });
+
   return useMutation(mutationFn, {
     ...options,
     onSuccess: (...params) => {

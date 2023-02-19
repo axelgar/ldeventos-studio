@@ -95,7 +95,7 @@ export default function Users() {
                           <div className="flex items-center">
                             <div className="h-10 w-10 flex-shrink-0">
                               {user.image ? (
-                                <img className="h-10 w-10 rounded-full" src={user.image} alt="" />
+                                <img className="h-10 w-10 rounded-full object-cover" src={user.image} alt="" />
                               ) : (
                                 <AvatarPlaceholder />
                               )}
@@ -116,7 +116,7 @@ export default function Users() {
                           <RolesBudge>{user.role}</RolesBudge>
                         </td>
                         <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <UserOptionsDropdown setOpenDeleteModal={setOpenDeleteModal} />
+                          <UserOptionsDropdown userId={user.id} setOpenDeleteModal={setOpenDeleteModal} />
                           <DeleteUserModal id={user.id} open={openDeleteModal} setOpen={setOpenDeleteModal} />
                         </td>
                       </tr>

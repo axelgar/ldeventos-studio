@@ -28,7 +28,7 @@ export class ApiClient {
     });
 
     if (response.ok) {
-      return response.json();
+      return await response.json();
     }
 
     throw new Error(response.statusText);

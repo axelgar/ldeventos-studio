@@ -7,10 +7,14 @@ import { useMutation, UseMutationOptions, MutateFunction } from '@tanstack/react
 type Data = Awaited<ReturnType<typeof userController.createOne>>;
 type MutationOptions = UseMutationOptions<Data, unknown, CreateUserDTO>;
 
+const { endpoint, method } = apiCalls.createUser;
+
 export const useCreateOne = (options?: MutationOptions) => {
   const apiClient = useApiClient();
-  const { endpoint, method } = apiCalls.createUser;
-  const mutationFn: MutateFunction<Data, unknown, CreateUserDTO> = (body: CreateUserDTO) =>
-    apiClient.request<Data>({ endpoint, method, body: JSON.stringify(body) });
+
+  const mutationFn: MutateFunction<Data, unknown, CreateUserDTO> = (body: CreateUserDTO) => {
+    return apiClient.request<Data>({ endpoint, method, body: JSON.stringify(body) });
+  };
+
   return useMutation(mutationFn, options);
 };
