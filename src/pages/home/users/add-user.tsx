@@ -8,6 +8,7 @@ import invariant from 'tiny-invariant';
 import { CreateUserDTO } from '@/api/user/user.dto';
 import { Input } from '@/components/Input';
 import { UserSchema } from '@/utils/form-schemas/user-schema';
+import { useToast } from '@/hooks/useToast';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -26,7 +27,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Team() {
-  const { mutate: createUser, isLoading } = useCreateOne();
+  const { toast } = useToast();
+  const { mutate: createUser, isLoading } = useCreateOne({
+    onSuccess: () => toast('User added correctly', 'success'),
+    onError: () => toast('There was an error trying to add the user', 'error'),
+  });
 
   return (
     <MainLayout title="Add user">

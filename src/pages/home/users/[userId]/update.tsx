@@ -19,6 +19,7 @@ import { useUploadAvatar } from '@/hooks/useUploadAvatar';
 import { fileSizeInMb } from '@/utils/file-size-in-mb';
 import { MAX_AVATAR_FILE_SIZE_IN_MB } from '@/constants';
 import { roundToTwoDecimals } from '@/utils/round-to-two-decimals';
+import { useToast } from '@/hooks/useToast';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -40,7 +41,11 @@ export default function Team() {
   const [avatarFile, setAvatarFile] = useState<File>();
   const router = useRouter<'/home/users/[userId]/update'>();
   const { userId } = router.query;
-  const { mutate: updateUser } = useUpdateUserById(userId);
+  const { toast } = useToast();
+  const { mutate: updateUser, isLoading: isUpdateLoading } = useUpdateUserById(userId, {
+    onSuccess: () => toast('User updated correctly', 'success'),
+    onError: () => toast('There was an error updating the user', 'error'),
+  });
   const { data: user, isLoading } = useGetUserById(userId);
   const { mutate: uploadAvatar, isLoading: isUploadLoading } = useUploadAvatar({
     onSuccess: (publicUrl) => updateUser({ id: userId, image: publicUrl }),
@@ -85,7 +90,7 @@ export default function Team() {
             updateUser({ id: userId, ...values });
           }}
         >
-          {({ errors, setFieldValue, setFieldError }) => (
+          {({ errors, setFieldValue, setFieldError, isValid }) => (
             <Form className="space-y-8 divide-y divide-gray-200">
               <div className="space-y-8 divide-y divide-gray-200">
                 <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -95,7 +100,7 @@ export default function Team() {
                     type="email"
                     autoComplete="email"
                     label="Email address"
-                    disabled={isLoading}
+                    disabled={isUpdateLoading}
                     errors={errors}
                   />
                   <Input id="name" name="name" type="text" autoComplete="name" label="Name" errors={errors} />
@@ -105,7 +110,7 @@ export default function Team() {
                     type="text"
                     autoComplete="mobileNumber"
                     label="Mobile phone number"
-                    disabled={isLoading}
+                    disabled={isUpdateLoading}
                     errors={errors}
                   />
 
@@ -118,7 +123,7 @@ export default function Team() {
                         id="role"
                         name="role"
                         as="select"
-                        disabled={isLoading}
+                        disabled={isUpdateLoading}
                         className={
                           errors.role
                             ? 'block w-full rounded-md border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm'
@@ -172,7 +177,7 @@ export default function Team() {
                         name="image"
                         type="file"
                         accept="image/*"
-                        disabled={isLoading || isUploadLoading}
+                        disabled={isUpdateLoading || isUploadLoading}
                         value={undefined}
                         className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                       />

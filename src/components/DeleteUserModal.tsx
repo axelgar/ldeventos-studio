@@ -2,12 +2,16 @@ import { Dispatch, Fragment, SetStateAction } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useDeleteUserById } from '@/hooks/useDeleteUserById';
+import { useToast } from '@/hooks/useToast';
 
 type Props = { id: string; open: boolean; setOpen: Dispatch<SetStateAction<boolean>> };
 
 export const DeleteUserModal = ({ id, open = true, setOpen }: Props) => {
+  const { toast } = useToast();
   const { mutate: deleteUser, isLoading } = useDeleteUserById(id, {
-    onSuccess: () => setOpen(false),
+    onSuccess: () => toast('User deleted correctly', 'success'),
+    onError: () => toast('There was an error deleting the user', 'error'),
+    onSettled: () => setOpen(false),
   });
 
   const handleOnClickDelete = () => {

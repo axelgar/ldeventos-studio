@@ -5,6 +5,7 @@ import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query
 import { AppProps } from 'next/app';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { REACT_QUERY_OPTIONS } from '@/config';
+import { ToastProvider } from '@/components/ToastProvider';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [queryClient] = useState(() => new QueryClient(REACT_QUERY_OPTIONS));
@@ -12,7 +13,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
     <SessionProvider session={session} refetchOnWindowFocus={false}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
+          <ToastProvider>
+            <Component {...pageProps} />
+          </ToastProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
       </QueryClientProvider>
