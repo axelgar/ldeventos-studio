@@ -42,11 +42,11 @@ export default function Team() {
   const router = useRouter<'/home/users/[userId]/update'>();
   const { userId } = router.query;
   const { toast } = useToast();
+  const { data: user, isLoading } = useGetUserById(userId);
   const { mutate: updateUser, isLoading: isUpdateLoading } = useUpdateUserById(userId, {
     onSuccess: () => toast('User updated correctly', 'success'),
     onError: () => toast('There was an error updating the user', 'error'),
   });
-  const { data: user, isLoading } = useGetUserById(userId);
   const { mutate: uploadAvatar, isLoading: isUploadLoading } = useUploadAvatar({
     onSuccess: (publicUrl) => updateUser({ id: userId, image: publicUrl }),
   });

@@ -15,31 +15,31 @@ enum Role {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  name          String
-  email         String       @unique
-  emailVerified DateTime?
-  image         String?
-  mobileNumber  String?       @db.VarChar(15)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  role          Role          @default(EXTERNAL)
-  accounts      Account[]
-  sessions      Session[]
-  userOnEvents  UserOnEvent[]
+  id             String          @id @default(cuid())
+  name           String
+  email          String          @unique
+  emailVerified  DateTime?
+  image          String?
+  mobileNumber   String?         @db.VarChar(15)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  role           Role            @default(EXTERNAL)
+  accounts       Account[]
+  sessions       Session[]
+  userOnProjects UserOnProject[]
 
   @@map("users")
 }
 
-model EventRole {
+model ProjectRole {
   id                String             @id @default(cuid())
   name              String             @unique
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  userOnEvents      UserOnEvent[]
+  userOnProjects    UserOnProject[]
   permissionsOnRole PermissionOnRole[]
 
-  @@map("event-roles")
+  @@map("project-roles")
 }
 
 model Permission {
@@ -52,55 +52,67 @@ model Permission {
 }
 
 model PermissionOnRole {
-  eventRole    EventRole  @relation(fields: [eventRoleId], references: [id], onDelete: Cascade)
-  eventRoleId  String
-  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-  permissionId String
+  projectRole   ProjectRole @relation(fields: [projectRoleId], references: [id], onDelete: Cascade)
+  projectRoleId String
+  permission    Permission  @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  permissionId  String
 
-  @@id([eventRoleId, permissionId])
-  @@unique([eventRoleId, permissionId])
+  @@id([projectRoleId, permissionId])
+  @@unique([projectRoleId, permissionId])
   @@index([permissionId])
   @@map("permission-on-roles")
 }
 
-model UserOnEvent {
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  eventId     String
-  assignedAt  DateTime  @default(now())
-  assignedBy  String
-  eventRole   EventRole? @relation(fields: [eventRoleId], references: [id])
-  eventRoleId String?
+model UserOnProject {
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  project       Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId     String
+  assignedAt    DateTime     @default(now())
+  assignedBy    String
+  projectRole   ProjectRole? @relation(fields: [projectRoleId], references: [id])
+  projectRoleId String?
 
-  @@id([userId, eventId])
-  @@unique([userId, eventId])
-  @@index([eventId])
-  @@index([eventRoleId])
-  @@map("users-on-events")
+  @@id([userId, projectId])
+  @@unique([userId, projectId])
+  @@index([projectId])
+  @@index([projectRoleId])
+  @@map("users-on-projects")
 }
 
-model EventType {
-  id     String  @id @default(cuid())
-  name   String // Concert, Brand event, Sport
-  events Event[]
+model ProjectType {
+  id       String    @id @default(cuid())
+  name     String // Concert, Brand project, Sport
+  projects Project[]
 
-  @@map("event-types")
+  @@map("project-types")
 }
 
-model Event {
-  id           String        @id @default(cuid())
-  name         String
-  logo         String?
-  subdomain    String        @unique
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  type         EventType     @relation(fields: [typeId], references: [id])
-  typeId       String
-  userOnEvents UserOnEvent[]
+model Project {
+  id            String          @id @default(cuid())
+  name          String
+  logo          String?
+  subdomain     String          @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  type          ProjectType     @relation(fields: [typeId], references: [id])
+  typeId        String
+  userOnProject UserOnProject[]
 
   @@index([typeId])
-  @@map("events")
+  @@map("projects")
+}
+
+model Provider {
+  id           String  @id @default(cuid())
+  name         String
+  contactName  String?
+  email        String?
+  phoneNumber  String? @db.VarChar(15)
+  mobileNumber String? @db.VarChar(15)
+  fax          String? @db.VarChar(15)
+
+  @@map("providers")
 }
 
 model Account {

@@ -1,10 +1,10 @@
 import { GetServerSidePropsContext } from 'next';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { eventController } from '@/api/event/event.controller';
+import { projectController } from '@/api/project/project.controller';
 import { apiCalls } from '@/utils/api-calls';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { useGetEventBySubdomain } from '@/hooks/useGetEventBySubdomain';
+import { useGetProjectBySubdomain } from '@/hooks/useGetProjectBySubdomain';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import invariant from 'tiny-invariant';
@@ -14,12 +14,12 @@ export async function getServerSideProps({ query, req, res }: GetServerSideProps
   invariant(session);
   const subdomain = query.subdomain as string;
   const queryClient = new QueryClient();
-  const { endpoint: getEndpoint, method } = apiCalls.getEventBySubdomain;
+  const { endpoint: getEndpoint, method } = apiCalls.getProjectBySubdomain;
   const endpoint = getEndpoint(subdomain);
 
   try {
     await queryClient.fetchQuery([endpoint, method], () =>
-      eventController.getBySubdomain(subdomain, session.user.email)
+      projectController.getBySubdomain(subdomain, session.user.email)
     );
     return { props: { dehydratedState: dehydrate(queryClient) } };
   } catch (error) {
@@ -33,11 +33,11 @@ export async function getServerSideProps({ query, req, res }: GetServerSideProps
 
 export default function SiteIndex(props: any) {
   const { query } = useRouter<'/sites/[subdomain]'>();
-  const { data: event } = useGetEventBySubdomain(query.subdomain);
+  const { data: project } = useGetProjectBySubdomain(query.subdomain);
 
   return (
     <main>
-      <h2>{event?.name}</h2>
+      <h2>{project?.name}</h2>
     </main>
   );
 }

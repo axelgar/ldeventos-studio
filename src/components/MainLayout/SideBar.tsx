@@ -5,6 +5,7 @@ import { isCurrent, navigation } from './utils';
 
 export const SideBar = () => {
   const router = useRouter();
+
   return (
     <div className="flex flex-grow flex-col overflow-y-auto bg-orange-500 pt-5 pb-4">
       <div className="flex flex-shrink-0 items-center px-4">
@@ -34,7 +35,7 @@ export const SideBar = () => {
                 </a>
               </div>
             ) : (
-              <Disclosure as="div" key={item.name} className="space-y-1">
+              <Disclosure as="div" key={item.name} className="space-y-1" defaultOpen={isCurrent(item, router)}>
                 {({ open }) => (
                   <>
                     <Disclosure.Button
@@ -67,9 +68,8 @@ export const SideBar = () => {
                     </Disclosure.Button>
                     <Disclosure.Panel className="space-y-1">
                       {item.children.map((subItem) => (
-                        <Disclosure.Button
+                        <a
                           key={subItem.name}
-                          as="a"
                           href={subItem.href}
                           className="group flex w-full items-center rounded-md py-2 pl-11 pr-2 text-sm font-medium text-white hover:bg-gray-50 hover:text-gray-900"
                         >
@@ -83,7 +83,7 @@ export const SideBar = () => {
                             />
                           )}
                           <span className="flex-1">{subItem.name}</span>
-                        </Disclosure.Button>
+                        </a>
                       ))}
                     </Disclosure.Panel>
                   </>

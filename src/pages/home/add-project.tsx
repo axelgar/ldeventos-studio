@@ -1,12 +1,12 @@
 import { StudioNavbar } from '@/components/StudioNavbar';
 
-export default function AddEvent() {
+export default function AddProject() {
   return (
     <div className="min-h-full">
       <StudioNavbar />
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-xl font-bold tracking-tight text-gray-900">Add event</h1>
+          <h1 className="text-xl font-bold tracking-tight text-gray-900">Add project</h1>
         </div>
       </header>
       <main>

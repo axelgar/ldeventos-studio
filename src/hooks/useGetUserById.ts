@@ -9,10 +9,10 @@ type QueryOptions = UseQueryOptions<
   unknown,
   unknown,
   Data,
-  (ReturnType<typeof apiCalls.getOneUserById.endpoint> | typeof apiCalls.getOneUserById.method)[]
+  (ReturnType<typeof apiCalls.getUserById.endpoint> | typeof apiCalls.getUserById.method)[]
 >;
 
-const { endpoint: getEndpoint, method } = apiCalls.getOneUserById;
+const { endpoint: getEndpoint, method } = apiCalls.getUserById;
 
 export const useGetUserById = (id?: string, options?: QueryOptions) => {
   const apiClient = useApiClient();

@@ -31,19 +31,24 @@ export const navigation = [
     icon: FolderIcon,
     children: [
       { name: 'See projects', href: '/', pathname: INTERNAL_PREFIX, icon: FolderIcon },
-      { name: 'Add new project', href: '/add-event', pathname: INTERNAL_PREFIX + '/add-event', icon: FolderPlusIcon },
       {
-        name: 'See project types',
-        href: '/project-types',
-        pathname: INTERNAL_PREFIX + '/project-types',
-        icon: Squares2X2Icon,
+        name: 'Add new project',
+        href: '/add-project',
+        pathname: INTERNAL_PREFIX + '/add-project',
+        icon: FolderPlusIcon,
       },
-      {
-        name: 'Add new project type',
-        href: '/project-types/add-project-type',
-        pathname: INTERNAL_PREFIX + '/project-types/add',
-        icon: SquaresPlusIcon,
-      },
+      // {
+      //   name: 'See project types',
+      //   href: '/project-types',
+      //   pathname: INTERNAL_PREFIX + '/project-types',
+      //   icon: Squares2X2Icon,
+      // },
+      // {
+      //   name: 'Add new project type',
+      //   href: '/project-types/add-project-type',
+      //   pathname: INTERNAL_PREFIX + '/project-types/add',
+      //   icon: SquaresPlusIcon,
+      // },
     ],
   },
   {
@@ -57,30 +62,35 @@ export const navigation = [
         pathname: INTERNAL_PREFIX + '/users/add-user',
         icon: UserPlusIcon,
       },
-      {
-        name: 'See event roles',
-        href: '/event-roles',
-        pathname: INTERNAL_PREFIX + '/event-roles',
-        icon: AcademicCapIcon,
-      },
-      {
-        name: 'Add a new event role',
-        href: '/event-roles/add-event-role',
-        pathname: INTERNAL_PREFIX + '/event-roles/add',
-        icon: PlusIcon,
-      },
+      // {
+      //   name: 'See project roles',
+      //   href: '/project-roles',
+      //   pathname: INTERNAL_PREFIX + '/project-roles',
+      //   icon: AcademicCapIcon,
+      // },
+      // {
+      //   name: 'Add a new project role',
+      //   href: '/project-roles/add-project-role',
+      //   pathname: INTERNAL_PREFIX + '/project-roles/add',
+      //   icon: PlusIcon,
+      // },
     ],
   },
-  // {
-  //   name: 'Providers',
-  //   icon: WrenchScrewdriverIcon,
-  //   children: [
-  //     { name: 'See providers', href: '#' },
-  //     { name: 'Add a new provider', href: '#' },
-  //     { name: 'Calendar', href: '#' },
-  //     { name: 'Settings', href: '#' },
-  //   ],
-  // },
+  {
+    name: 'Providers',
+    icon: WrenchScrewdriverIcon,
+    children: [
+      {
+        name: 'See providers',
+        href: '/providers',
+        pathname: INTERNAL_PREFIX + '/providers',
+        icon: WrenchScrewdriverIcon,
+      },
+      // { name: 'Add a new provider', href: '#' },
+      // { name: 'Calendar', href: '#' },
+      // { name: 'Settings', href: '#' },
+    ],
+  },
   // {
   //   name: 'Promoters',
   //   icon: UserGroupIcon,

@@ -9,9 +9,11 @@ type Props = { id: string; open: boolean; setOpen: Dispatch<SetStateAction<boole
 export const DeleteUserModal = ({ id, open = true, setOpen }: Props) => {
   const { toast } = useToast();
   const { mutate: deleteUser, isLoading } = useDeleteUserById(id, {
-    onSuccess: () => toast('User deleted correctly', 'success'),
+    onSuccess: () => {
+      setOpen(false);
+      toast('User deleted correctly', 'success');
+    },
     onError: () => toast('There was an error deleting the user', 'error'),
-    onSettled: () => setOpen(false),
   });
 
   const handleOnClickDelete = () => {

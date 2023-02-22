@@ -1,8 +1,7 @@
-import { eventController } from '@/api/event/event.controller';
+import { projectController } from '@/api/project/project.controller';
 import MainLayout from '@/components/MainLayout';
-import { useFindEventsByUserId } from '@/hooks/useFindEventsByUserId';
+import { useFindProjectsByUserId } from '@/hooks/useFindProjectsByUserId';
 import { apiCalls } from '@/utils/api-calls';
-import { PlusIcon } from '@heroicons/react/20/solid';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
@@ -36,10 +35,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   invariant(session);
   const userId = session.user.id;
   const queryClient = new QueryClient();
-  const { endpoint: getEndpoint, method } = apiCalls.findEventsByUserId;
+  const { endpoint: getEndpoint, method } = apiCalls.findProjectsByUserId;
   const endpoint = getEndpoint(userId);
   try {
-    await queryClient.fetchQuery([endpoint, method], () => eventController.findByUserId(userId));
+    await queryClient.fetchQuery([endpoint, method], () => projectController.findByUserId(userId));
     return { props: { dehydratedState: dehydrate(queryClient) } };
   } catch (error) {
     return { props: {} };
@@ -48,24 +47,24 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 export default function Home() {
   const { data: session } = useSession();
-  const { data: events } = useFindEventsByUserId(session?.user.id);
+  const { data: project } = useFindProjectsByUserId(session?.user.id);
 
   return (
     <MainLayout>
       <div className="mx-auto min-h-full max-w-7xl py-6 sm:px-6 lg:px-8">
         <div className="text-end">
-          <a className="rounded-md bg-orange-500 py-2 px-4 text-white" href="/add-event">
-            Add new event
+          <a className="rounded-md bg-orange-500 py-2 px-4 text-white" href="/add-project">
+            Add new project
           </a>
         </div>
-        {events ? (
+        {project?.length ? (
           <ul className="divide-y divide-gray-200">
-            {events.map((event) => (
-              <li key={event.subdomain} className="flex py-4">
-                <img className="h-10 w-10 rounded-full" src={event.logo || ''} alt="" />
+            {project.map((project) => (
+              <li key={project.subdomain} className="flex py-4">
+                <img className="h-10 w-10 rounded-full" src={project.logo || ''} alt="" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">{event.name}</p>
-                  <p className="text-sm text-gray-500">{event.subdomain}</p>
+                  <p className="text-sm font-medium text-gray-900">{project.name}</p>
+                  <p className="text-sm text-gray-500">{project.subdomain}</p>
                 </div>
               </li>
             ))}

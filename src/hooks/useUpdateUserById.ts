@@ -8,7 +8,7 @@ type Data = Awaited<ReturnType<typeof userController.createOne>>;
 type MutationOptions = UseMutationOptions<Data, unknown, UpdateUserDTO>;
 
 const { endpoint, method } = apiCalls.updateUserById;
-const { endpoint: getEndpoint, method: getUserMethod } = apiCalls.getOneUserById;
+const { endpoint: getEndpoint, method: getUserMethod } = apiCalls.getUserById;
 
 export const useUpdateUserById = (userId: string, options?: MutationOptions) => {
   const queryClient = useQueryClient();

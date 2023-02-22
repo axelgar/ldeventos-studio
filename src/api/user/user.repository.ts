@@ -6,7 +6,7 @@ import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 class UserRepository {
   async findAll() {
     try {
-      return prisma.user.findMany({
+      return await prisma.user.findMany({
         select: {
           id: true,
           name: true,
@@ -14,7 +14,7 @@ class UserRepository {
           image: true,
           role: true,
           mobileNumber: true,
-          userOnEvents: { select: { event: { select: { name: true, logo: true } } } },
+          userOnProjects: { select: { project: { select: { name: true, logo: true } } } },
         },
       });
     } catch (error) {
@@ -23,7 +23,7 @@ class UserRepository {
   }
 
   async getOneById(id: string) {
-    return prisma.user.findFirstOrThrow({
+    return await prisma.user.findFirstOrThrow({
       where: { id },
       select: {
         email: true,
@@ -31,29 +31,28 @@ class UserRepository {
         role: true,
         image: true,
         mobileNumber: true,
-        userOnEvents: { select: { event: { select: { id: true } } } },
+        userOnProjects: { select: { project: { select: { id: true } } } },
       },
     });
   }
 
   async getOneByEmail(email: string) {
-    return prisma.user.findFirstOrThrow({
+    return await prisma.user.findFirstOrThrow({
       where: { email },
-      select: { name: true, role: true, userOnEvents: { select: { event: { select: { id: true } } } } },
+      select: { name: true, role: true, userOnProjects: { select: { project: { select: { id: true } } } } },
     });
   }
 
   async createOne({ email, name, mobileNumber, role }: CreateUserDTO) {
-    return prisma.user.create({ data: { email, name, mobileNumber, role } });
+    return await prisma.user.create({ data: { email, name, mobileNumber, role } });
   }
 
   async updateOneById({ id, name, email, image, role, mobileNumber }: UpdateUserDTO) {
-    return prisma.user.update({ where: { id }, data: { name, email, image, role, mobileNumber } });
+    return await prisma.user.update({ where: { id }, data: { name, email, image, role, mobileNumber } });
   }
 
   async deleteOneById(id: User['id']) {
-    'Repository delete';
-    return prisma.user.delete({ where: { id } });
+    return await prisma.user.delete({ where: { id } });
   }
 }
 

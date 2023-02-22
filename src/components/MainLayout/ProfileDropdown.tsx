@@ -9,6 +9,7 @@ const userNavigation = [{ name: 'Your Profile', href: '#' }];
 export const ProfileDropdown = () => {
   const { data: session } = useSession();
 
+  // TODO get user info from endpoint "me" not from session, keep session as light as possible since it is not updated if user updates
   return (
     <Menu as="div" className="relative ml-3">
       <div>

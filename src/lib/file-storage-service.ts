@@ -68,4 +68,4 @@ export class FileStorageService {
   }
 }
 
-export const fileStorageService = new FileStorageService('ldeventos-public');
+export const fileStorageService = new FileStorageService(process.env.GCLOUD_STORAGE_BUCKET!);
