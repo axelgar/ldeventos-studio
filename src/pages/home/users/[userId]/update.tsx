@@ -150,7 +150,7 @@ export default function Team() {
                     </label>
                     <div className="mt-1 flex items-center">
                       {user?.image ? (
-                        <img className="h-8 w-8 rounded-full object-cover" src={user?.image} alt="" />
+                        <img className="h-12 w-12 rounded-full object-cover" src={user?.image} alt="" />
                       ) : (
                         <AvatarPlaceholder size="l" />
                       )}
