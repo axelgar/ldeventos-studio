@@ -10,7 +10,7 @@ export const UserSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
   role: yup.mixed<Role>().oneOf(Object.values(Role)),
   image: yup
-    .mixed()
+    .mixed<File>()
     .test('fileSize', 'This image is too big, please upload an image lower than 2MB', (value) => {
       if (!value) {
         return true;
