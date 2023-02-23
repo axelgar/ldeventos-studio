@@ -10,6 +10,7 @@ import { UserOptionsDropdown } from '@/components/UserOptionsDropdown';
 import { useFindAllUsers } from '@/hooks/useFindAllUsers';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { apiCalls } from '@/utils/api-calls';
+import { PageSpinner } from '@/components/PageSpinner';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -27,12 +28,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
   const { endpoint, method } = apiCalls.findAllUsers;
 
-  await queryClient.fetchQuery([endpoint, method], () => userController.findAll());
-  return { props: { dehydratedState: dehydrate(queryClient) } };
+  try {
+    await queryClient.fetchQuery([endpoint, method], () => userController.findAll());
+    return { props: { dehydratedState: dehydrate(queryClient) } };
+  } catch (error) {
+    return { props: {} };
+  }
 }
 
 export default function Users() {
-  const { data: users } = useFindAllUsers();
+  const { data: users, isLoading } = useFindAllUsers();
 
   return (
     <MainLayout title="Users">
@@ -53,61 +58,68 @@ export default function Users() {
           </div>
         </div>
         <div className="mt-8 flow-root">
-          <div className="-my-2 -mx-6 lg:-mx-8">
+          <div className="-my-2 -mx-6 overflow-x-auto lg:-mx-8">
             <div className="inline-block min-w-full py-2 pb-10 align-middle sm:px-6 lg:px-8">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead>
-                  <tr>
-                    <th scope="col" className="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                      Name
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Mobile
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Nº projects
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Role
-                    </th>
-                    <th scope="col" className="relative py-3.5 pl-3 pr-6 sm:pr-0">
-                      <span className="sr-only">Edit</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {users?.map((user) => (
-                    <tr key={user.email}>
-                      <td className="whitespace-nowrap py-4 pl-6 pr-3 text-sm sm:pl-0">
-                        <div className="flex items-center">
-                          <div className="h-10 w-10 flex-shrink-0">
-                            {user.image ? (
-                              <img className="h-10 w-10 rounded-full object-cover" src={user.image} alt="" />
-                            ) : (
-                              <AvatarPlaceholder />
-                            )}
-                          </div>
-                          <div className="ml-4">
-                            <div className="font-medium text-gray-900">{user.name}</div>
-                            <div className="text-gray-500">{user.email}</div>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{user.mobileNumber}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {user.userOnProjects.length}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <RolesBudge>{user.role}</RolesBudge>
-                      </td>
-                      <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium sm:pr-0">
-                        <UserOptionsDropdown userId={user.id} />
-                      </td>
+              {isLoading ? (
+                <PageSpinner />
+              ) : (
+                <table className="mb-12 min-w-full divide-y divide-gray-300">
+                  <thead>
+                    <tr>
+                      <th
+                        scope="col"
+                        className="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                      >
+                        Name
+                      </th>
+                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                        Mobile
+                      </th>
+                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                        Nº projects
+                      </th>
+                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                        Role
+                      </th>
+                      <th scope="col" className="relative py-3.5 pl-3 pr-6 sm:pr-0">
+                        <span className="sr-only">Edit</span>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {users?.map((user) => (
+                      <tr key={user.email}>
+                        <td className="whitespace-nowrap py-4 pl-6 pr-3 text-sm sm:pl-0">
+                          <div className="flex items-center">
+                            <div className="h-10 w-10 flex-shrink-0">
+                              {user.image ? (
+                                <img className="h-10 w-10 rounded-full object-cover" src={user.image} alt="" />
+                              ) : (
+                                <AvatarPlaceholder />
+                              )}
+                            </div>
+                            <div className="ml-4">
+                              <div className="font-medium text-gray-900">{user.name}</div>
+                              <div className="text-gray-500">{user.email}</div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{user.mobileNumber}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {user.userOnProjects.length}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <RolesBudge>{user.role}</RolesBudge>
+                        </td>
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium sm:pr-0">
+                          <UserOptionsDropdown userId={user.id} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>

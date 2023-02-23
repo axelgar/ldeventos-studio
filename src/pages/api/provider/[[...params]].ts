@@ -11,6 +11,12 @@ class ProviderHandler {
     return await providerController.findAll({ skip, limit });
   }
 
+  @Get('/:providerId')
+  @Auth('ADMIN', 'MEMBER')()
+  async getOneById(@Param('providerId') providerId: string) {
+    return await providerController.getOneById(providerId);
+  }
+
   @Post()
   @Auth('ADMIN', 'MEMBER')()
   async createOne(@Body(ValidationPipe) newUser: CreateProviderDTO) {

@@ -1,24 +1,24 @@
 import { Dispatch, Fragment, SetStateAction } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useDeleteUserById } from '@/hooks/useDeleteUserById';
+import { useDeleteProviderById } from '@/hooks/useDeleteProviderById';
 import { useToast } from '@/hooks/useToast';
 
-type Props = { userId: string; open: boolean; setOpen: Dispatch<SetStateAction<boolean>> };
+type Props = { providerId: string; open: boolean; setOpen: Dispatch<SetStateAction<boolean>> };
 
-export const DeleteUserModal = ({ userId, open = true, setOpen }: Props) => {
+export const DeleteProviderModal = ({ providerId, open = true, setOpen }: Props) => {
   const { toast } = useToast();
-  const { mutate: deleteUser, isLoading } = useDeleteUserById(userId, {
+  const { mutate: deleteProvider, isLoading } = useDeleteProviderById(providerId, {
     onSuccess: () => {
       setOpen(false);
-      toast('User deleted correctly', 'success');
+      toast('Provider deleted correctly', 'success');
     },
-    onError: () => toast('There was an error deleting the user', 'error'),
+    onError: () => toast('There was an error deleting the provider', 'error'),
   });
 
   const handleOnClickDelete = () => {
     setOpen(false);
-    deleteUser();
+    deleteProvider();
   };
 
   return (
@@ -65,12 +65,12 @@ export const DeleteUserModal = ({ userId, open = true, setOpen }: Props) => {
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                      Delete user
+                      Delete provider
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Are you sure you want to delete this user? All of the data will be permanently removed from our
-                        servers forever. This action cannot be undone.
+                        Are you sure you want to delete this provider? All of the data will be permanently removed from
+                        our servers forever. This action cannot be undone.
                       </p>
                     </div>
                   </div>

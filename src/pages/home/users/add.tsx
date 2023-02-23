@@ -26,10 +26,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: {} };
 }
 
-export default function Team() {
+export default function AddUser() {
   const { toast } = useToast();
   const { mutate: createUser, isLoading } = useCreateUser({
     onSuccess: () => toast('User added correctly', 'success'),
+    // TODO improve error cases (when user already exists, etc)
     onError: () => toast('There was an error trying to add the user', 'error'),
   });
 

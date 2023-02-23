@@ -16,6 +16,7 @@ class UserRepository {
           mobileNumber: true,
           userOnProjects: { select: { project: { select: { name: true, logo: true } } } },
         },
+        orderBy: [{ role: 'asc' }, { name: 'asc' }],
       });
     } catch (error) {
       throw new BadRequestException(`There was an error trying to find all users`);

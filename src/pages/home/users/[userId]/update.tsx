@@ -13,7 +13,7 @@ import { PageSpinner } from '@/components/PageSpinner';
 import { isValidAvatarFileType } from '@/utils/is-valid-avatar-file-type';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useGetAvatarUploadUrl } from '@/hooks/useGetAvatarUploadUrl';
-import { useUpdateUserById } from '@/hooks/useUpdateUserById';
+import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { AvatarPlaceholder } from '@/components/AvatarPlaceholder';
 import { useUploadAvatar } from '@/hooks/useUploadAvatar';
 import { fileSizeInMb } from '@/utils/file-size-in-mb';
@@ -37,13 +37,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: {} };
 }
 
-export default function Team() {
+export default function UpdateUser() {
   const [avatarFile, setAvatarFile] = useState<File>();
   const router = useRouter<'/home/users/[userId]/update'>();
   const { userId } = router.query;
   const { toast } = useToast();
   const { data: user, isLoading } = useGetUserById(userId);
-  const { mutate: updateUser, isLoading: isUpdateLoading } = useUpdateUserById(userId, {
+  const { mutate: updateUser, isLoading: isUpdateLoading } = useUpdateUser(userId, {
     onSuccess: () => toast('User updated correctly', 'success'),
     onError: () => toast('There was an error updating the user', 'error'),
   });

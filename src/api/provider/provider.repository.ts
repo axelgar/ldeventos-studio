@@ -4,7 +4,11 @@ import { CreateProviderDTO, FindAllProvidersDTO, UpdateProviderDTO } from './pro
 
 class ProviderRepository {
   async findAll({ skip, limit }: FindAllProvidersDTO) {
-    return await prisma.provider.findMany({ skip, take: limit });
+    return await prisma.provider.findMany({ skip, take: limit, orderBy: { name: 'asc' } });
+  }
+
+  async getOneById(id: Provider['id']) {
+    return await prisma.provider.findFirstOrThrow({ where: { id } });
   }
 
   async createOne({ name, contactName, email, mobileNumber, fax, phoneNumber }: CreateProviderDTO) {

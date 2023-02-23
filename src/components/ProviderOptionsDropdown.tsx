@@ -4,13 +4,13 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/classnames';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/router';
-import { DeleteUserModal } from './DeleteUserModal';
+import { DeleteProviderModal } from './DeleteProviderModal';
 
 type Props = {
-  userId: string;
+  providerId: string;
 };
 
-export const UserOptionsDropdown = ({ userId }: Props) => {
+export const ProviderOptionsDropdown = ({ providerId }: Props) => {
   const router = useRouter();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
@@ -37,7 +37,7 @@ export const UserOptionsDropdown = ({ userId }: Props) => {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    onClick={() => router.push(`/users/${userId}/update`)}
+                    onClick={() => router.push(`/providers/${providerId}/update`)}
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'group flex w-full items-center px-4 py-2 text-sm'
@@ -71,7 +71,7 @@ export const UserOptionsDropdown = ({ userId }: Props) => {
           </Menu.Items>
         </Transition>
       </Menu>
-      <DeleteUserModal userId={userId} open={openDeleteModal} setOpen={setOpenDeleteModal} />
+      <DeleteProviderModal providerId={providerId} open={openDeleteModal} setOpen={setOpenDeleteModal} />
     </>
   );
 };

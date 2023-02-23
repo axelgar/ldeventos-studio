@@ -26,7 +26,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: {} };
 }
 
-export default function Team() {
+export default function AddProvider() {
   const { toast } = useToast();
   const { mutate: createProvider, isLoading } = useCreateProvider({
     onSuccess: () => toast('Provider added correctly', 'success'),
@@ -87,7 +87,7 @@ export default function Team() {
                 <Input
                   id="email"
                   name="email"
-                  type="email"
+                  type="text"
                   autoComplete="email"
                   label="Email address"
                   disabled={isLoading}

@@ -1,5 +1,5 @@
 import { Provider } from '@prisma/client';
-import { BadRequestException } from 'next-api-decorators';
+import { BadRequestException, NotFoundException } from 'next-api-decorators';
 import { CreateProviderDTO, FindAllProvidersDTO, UpdateProviderDTO } from './provider.dto';
 import { providerRepository } from './provider.repository';
 
@@ -8,6 +8,10 @@ class ProviderController {
 
   async findAll({ skip = 0, limit = 100 }: FindAllProvidersDTO = { skip: 0, limit: 100 }) {
     return await this.providerRepository.findAll({ skip, limit });
+  }
+
+  async getOneById(id: Provider['id']) {
+    return await this.providerRepository.getOneById(id);
   }
 
   async createOne(provider: CreateProviderDTO) {

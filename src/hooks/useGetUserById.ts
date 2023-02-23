@@ -14,11 +14,11 @@ type QueryOptions = UseQueryOptions<
 
 const { endpoint: getEndpoint, method } = apiCalls.getUserById;
 
-export const useGetUserById = (id?: string, options?: QueryOptions) => {
+export const useGetUserById = (userId?: string, options?: QueryOptions) => {
   const apiClient = useApiClient();
-  invariant(id);
-  const endpoint = getEndpoint(id);
+  invariant(userId);
+  const endpoint = getEndpoint(userId);
 
   const queryFn: QueryFunction = ({ signal }) => apiClient.request<Data>({ endpoint, method, signal });
-  return useQuery([endpoint, method], queryFn, { ...options, enabled: !!id });
+  return useQuery([endpoint, method], queryFn, { ...options, enabled: !!userId });
 };

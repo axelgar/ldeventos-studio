@@ -4,13 +4,13 @@ import { useApiClient } from '@/Store';
 import { apiCalls } from '@/utils/api-calls';
 import { useMutation, UseMutationOptions, MutateFunction, useQueryClient } from '@tanstack/react-query';
 
-type Data = Awaited<ReturnType<typeof userController.createOne>>;
+type Data = Awaited<ReturnType<typeof userController.updateOneById>>;
 type MutationOptions = UseMutationOptions<Data, unknown, UpdateUserDTO>;
 
 const { endpoint, method } = apiCalls.updateUserById;
 const { endpoint: getEndpoint, method: getUserMethod } = apiCalls.getUserById;
 
-export const useUpdateUserById = (userId: string, options?: MutationOptions) => {
+export const useUpdateUser = (userId: string, options?: MutationOptions) => {
   const queryClient = useQueryClient();
   const apiClient = useApiClient();
 

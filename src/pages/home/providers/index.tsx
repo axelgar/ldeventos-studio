@@ -1,15 +1,13 @@
-import { useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import invariant from 'tiny-invariant';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { providerController } from '@/api/provider/provider.controller';
-import { DeleteUserModal } from '@/components/DeleteUserModal';
 import MainLayout from '@/components/MainLayout';
-import { UserOptionsDropdown } from '@/components/UserOptionsDropdown';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { apiCalls } from '@/utils/api-calls';
 import { useFindAllProviders } from '@/hooks/useFindAllProviders';
+import { ProviderOptionsDropdown } from '@/components/ProviderOptionsDropdown';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -27,12 +25,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
   const { endpoint, method } = apiCalls.findAllProviders;
 
-  await queryClient.fetchQuery([endpoint, method], () => providerController.findAll());
-  return { props: { dehydratedState: dehydrate(queryClient) } };
+  try {
+    await queryClient.fetchQuery([endpoint, method], () => providerController.findAll());
+    return { props: { dehydratedState: dehydrate(queryClient) } };
+  } catch (error) {
+    return { props: {} };
+  }
 }
 
-export default function Users() {
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+export default function Providers() {
   const { data: providers } = useFindAllProviders();
 
   return (
@@ -54,9 +55,9 @@ export default function Users() {
           </div>
         </div>
         <div className="mt-8 flow-root">
-          <div className="-my-2 -mx-6 lg:-mx-8">
+          <div className="-my-2 -mx-6 overflow-x-auto lg:-mx-8">
             <div className="inline-block min-w-full py-2 pb-10 align-middle sm:px-6 lg:px-8">
-              <table className="min-w-full divide-y divide-gray-300">
+              <table className="mb-12 min-w-full divide-y divide-gray-300">
                 <thead>
                   <tr>
                     <th scope="col" className="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
@@ -86,14 +87,34 @@ export default function Users() {
                   {providers?.map((provider) => (
                     <tr key={provider.id}>
                       <td className="whitespace-nowrap py-4 text-sm text-gray-500">{provider.name}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{provider.contactName}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {provider.contactName?.split(',').map((name, index) => (
+                          <span key={name + index}>
+                            {name}
+                            <br />
+                          </span>
+                        ))}
+                      </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{provider.phoneNumber}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{provider.fax}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{provider.mobileNumber}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{provider.email}</td>
-
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {provider.mobileNumber?.split(',').map((mobileNumber, index) => (
+                          <span key={mobileNumber + index}>
+                            {mobileNumber}
+                            <br />
+                          </span>
+                        ))}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {provider.email?.split(',').map((email, index) => (
+                          <span key={email + index}>
+                            {email}
+                            <br />
+                          </span>
+                        ))}
+                      </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium sm:pr-0">
-                        {/* <UserOptionsDropdown userId={provider.id} /> */}
+                        <ProviderOptionsDropdown providerId={provider.id} />
                       </td>
                     </tr>
                   ))}

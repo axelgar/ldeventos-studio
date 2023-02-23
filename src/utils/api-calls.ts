@@ -23,7 +23,8 @@ export const apiCalls = {
 
   // Provider
   findAllProviders: { endpoint: '/api/provider', method: GET },
+  getProviderById: { endpoint: (providerId: string) => `/api/provider/${providerId}`, method: GET },
   createProvider: { endpoint: '/api/provider', method: POST },
-  updateProviderById: { endpoint: (providerId: string) => `/api/provider/${providerId}`, method: PUT },
+  updateProviderById: { endpoint: '/api/provider', method: PUT },
   deleteProviderById: { endpoint: (providerId: string) => `/api/provider/${providerId}`, method: DELETE },
 } as const;

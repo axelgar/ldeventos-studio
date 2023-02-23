@@ -13,6 +13,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/user-avatar/[[...params]]">
     | StaticRoute<"/home/add-project">
     | StaticRoute<"/home">
+    | DynamicRoute<"/home/providers/[providerId]/update", { "providerId": string }>
     | StaticRoute<"/home/providers/add">
     | StaticRoute<"/home/providers">
     | DynamicRoute<"/home/users/[userId]/update", { "userId": string }>
