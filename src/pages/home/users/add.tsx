@@ -1,5 +1,5 @@
 import MainLayout from '@/components/MainLayout';
-import { useCreateOne } from '@/hooks/useCreateUser';
+import { useCreateUser } from '@/hooks/useCreateUser';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { GetServerSidePropsContext } from 'next';
@@ -28,7 +28,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 export default function Team() {
   const { toast } = useToast();
-  const { mutate: createUser, isLoading } = useCreateOne({
+  const { mutate: createUser, isLoading } = useCreateUser({
     onSuccess: () => toast('User added correctly', 'success'),
     onError: () => toast('There was an error trying to add the user', 'error'),
   });

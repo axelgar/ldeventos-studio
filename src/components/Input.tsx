@@ -1,15 +1,14 @@
-import { CreateUserDTO } from '@/api/user/user.dto';
 import { ErrorMessage, Field, FormikErrors } from 'formik';
 
-type Props = {
-  errors: FormikErrors<CreateUserDTO>;
+type Props<T> = {
+  errors: FormikErrors<T>;
   label: string;
-  id: keyof CreateUserDTO;
-  name: keyof CreateUserDTO;
+  id: keyof T;
+  name: keyof T;
   autoComplete: string;
 } & Partial<HTMLInputElement>;
 
-export const Input = ({ errors, label, id, name, autoComplete, ...props }: Props) => (
+export const Input = <T,>({ errors, label, id, name, autoComplete, ...props }: Props<T>) => (
   <div className="sm:col-span-4">
     <label htmlFor={id} className="block text-sm font-medium text-gray-700">
       {label}

@@ -58,8 +58,8 @@ export const navigation = [
       { name: 'See users', href: '/users', pathname: INTERNAL_PREFIX + '/users', icon: UsersIcon },
       {
         name: 'Add a new user',
-        href: '/users/add-user',
-        pathname: INTERNAL_PREFIX + '/users/add-user',
+        href: '/users/add',
+        pathname: INTERNAL_PREFIX + '/users/add',
         icon: UserPlusIcon,
       },
       // {
@@ -86,7 +86,12 @@ export const navigation = [
         pathname: INTERNAL_PREFIX + '/providers',
         icon: WrenchScrewdriverIcon,
       },
-      // { name: 'Add a new provider', href: '#' },
+      {
+        name: 'Add a new provider',
+        href: '/providers/add',
+        pathname: INTERNAL_PREFIX + '/providers/add',
+        icon: PlusIcon,
+      },
       // { name: 'Calendar', href: '#' },
       // { name: 'Settings', href: '#' },
     ],

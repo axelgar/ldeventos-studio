@@ -9,7 +9,7 @@ type MutationOptions = UseMutationOptions<Data, unknown, CreateUserDTO>;
 
 const { endpoint, method } = apiCalls.createUser;
 
-export const useCreateOne = (options?: MutationOptions) => {
+export const useCreateUser = (options?: MutationOptions) => {
   const apiClient = useApiClient();
 
   const mutationFn: MutateFunction<Data, unknown, CreateUserDTO> = (body: CreateUserDTO) => {

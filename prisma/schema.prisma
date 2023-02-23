@@ -105,7 +105,7 @@ model Project {
 
 model Provider {
   id           String  @id @default(cuid())
-  name         String
+  name         String  @unique
   contactName  String?
   email        String?
   phoneNumber  String? @db.VarChar(15)
