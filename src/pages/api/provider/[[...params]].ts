@@ -34,6 +34,12 @@ class ProviderHandler {
   async deleteOneById(@Param('id') id: Provider['id']) {
     return await providerController.deleteOneById(id);
   }
+
+  @Get('/search-by-name/:searchTerm')
+  @Auth('ADMIN', 'MEMBER')()
+  async searchByName(@Param('searchTerm') searchTerm: string) {
+    return await providerController.searchByName(searchTerm);
+  }
 }
 
 export default createHandler(ProviderHandler);

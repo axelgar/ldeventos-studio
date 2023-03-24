@@ -8,6 +8,11 @@ export class FindAllProvidersDTO {
   limit!: number;
 }
 
+export class SearchByNameDTO {
+  @IsNotEmpty()
+  searchTerm!: Provider['name'];
+}
+
 export class CreateProviderDTO {
   @IsNotEmpty()
   name!: Provider['name'];

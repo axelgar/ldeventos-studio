@@ -1,5 +1,5 @@
 import { Provider } from '@prisma/client';
-import { BadRequestException, NotFoundException } from 'next-api-decorators';
+import { BadRequestException } from 'next-api-decorators';
 import { CreateProviderDTO, FindAllProvidersDTO, UpdateProviderDTO } from './provider.dto';
 import { providerRepository } from './provider.repository';
 
@@ -37,6 +37,10 @@ class ProviderController {
     } catch (error) {
       throw new BadRequestException(`There was an error trying to delete provider with id: ${id}`);
     }
+  }
+
+  async searchByName(searchTerm: Provider['name']) {
+    return await this.providerRepository.searchByName({ searchTerm });
   }
 }
 

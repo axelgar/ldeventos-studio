@@ -1,6 +1,6 @@
 import { Provider } from '@prisma/client';
 import { prisma } from '../../lib/prisma';
-import { CreateProviderDTO, FindAllProvidersDTO, UpdateProviderDTO } from './provider.dto';
+import { CreateProviderDTO, FindAllProvidersDTO, SearchByNameDTO, UpdateProviderDTO } from './provider.dto';
 
 class ProviderRepository {
   async findAll({ skip, limit }: FindAllProvidersDTO) {
@@ -24,6 +24,10 @@ class ProviderRepository {
 
   async deleteOneById(id: Provider['id']) {
     return await prisma.provider.delete({ where: { id } });
+  }
+
+  async searchByName({ searchTerm }: SearchByNameDTO) {
+    return await prisma.provider.findMany({ where: { name: { contains: searchTerm } } });
   }
 }
 

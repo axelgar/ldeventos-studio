@@ -27,4 +27,5 @@ export const apiCalls = {
   createProvider: { endpoint: '/api/provider', method: POST },
   updateProviderById: { endpoint: '/api/provider', method: PUT },
   deleteProviderById: { endpoint: (providerId: string) => `/api/provider/${providerId}`, method: DELETE },
+  searchProviderByName: { endpoint: (searchTerm: string) => `/api/provider/search-by-name/${searchTerm}`, method: GET },
 } as const;

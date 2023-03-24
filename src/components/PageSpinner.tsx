@@ -1,5 +1,5 @@
 export const PageSpinner = () => (
-  <div role="status" className="flex h-full items-center justify-center">
+  <div role="status" className="mt-10 flex h-full items-center justify-center">
     <svg
       aria-hidden="true"
       className="mr-2 h-8 w-8 animate-spin fill-orange-600 text-gray-200 "
