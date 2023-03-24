@@ -40,7 +40,7 @@ export default function UpdateProvider() {
   });
 
   return (
-    <MainLayout title="Add provider">
+    <MainLayout title="Update provider">
       {isLoading ? (
         <PageSpinner />
       ) : (
