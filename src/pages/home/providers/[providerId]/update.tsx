@@ -64,13 +64,22 @@ export default function UpdateProvider() {
             <Form className="space-y-8 divide-y divide-gray-200">
               <div className="space-y-8 divide-y divide-gray-200">
                 <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                  <Input id="name" name="name" type="text" autoComplete="name" label="Name" errors={errors} />
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    label="Name"
+                    disabled={isLoading}
+                    errors={errors}
+                  />
                   <Input
                     id="contactName"
                     name="contactName"
                     type="text"
                     autoComplete="contactName"
                     label="Contact"
+                    disabled={isLoading}
                     errors={errors}
                   />
                   <Input

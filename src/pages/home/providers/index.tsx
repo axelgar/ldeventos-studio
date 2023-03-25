@@ -112,8 +112,9 @@ export default function Providers() {
                 onChange={(event) => setSearchInputValue(event.target.value)}
                 id="search"
                 name="search"
+                minLength={2}
                 className="border-1 block w-full rounded-md border-gray-400 bg-white py-1.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-500 focus:ring-0 sm:text-sm sm:leading-6"
-                placeholder="Search"
+                placeholder="Search by provider name"
                 type="search"
               />
             </div>

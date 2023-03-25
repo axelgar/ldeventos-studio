@@ -1,14 +1,14 @@
 import MainLayout from '@/components/MainLayout';
-import { useCreateProvider } from '@/hooks/useCreateProvider';
+import { useCreatePromoter } from '@/hooks/useCreatePromoter';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Form, Formik } from 'formik';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import invariant from 'tiny-invariant';
 import { Input } from '@/components/Input';
-import { ProviderSchema } from '@/utils/form-schemas/provider-schema';
+import { PromoterSchema } from '@/utils/form-schemas/promoter-schema';
 import { useToast } from '@/hooks/useToast';
-import { CreateProviderDTO } from '@/api/provider/provider.dto';
+import { CreatePromoterDTO } from '@/api/promoter/promoter.dto';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -26,22 +26,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: {} };
 }
 
-export default function AddProvider() {
+export default function AddPromoter() {
   const { toast } = useToast();
-  const { mutate: createProvider, isLoading } = useCreateProvider({
-    onSuccess: () => toast('Provider added correctly', 'success'),
-    onError: () => toast('There was an error trying to add the provider', 'error'),
+  const { mutate: createPromoter, isLoading } = useCreatePromoter({
+    onSuccess: () => toast('Promoter added correctly', 'success'),
+    onError: () => toast('There was an error trying to add the promoter', 'error'),
   });
 
   return (
-    <MainLayout title="Add provider">
+    <MainLayout title="Add promoter">
       <Formik
-        initialValues={
-          { email: '', name: '', mobileNumber: '', phoneNumber: '', fax: '', contactName: '' } as CreateProviderDTO
-        }
-        validationSchema={ProviderSchema}
+        initialValues={{ name: '', address: '', code: '', phoneNumber: '', website: '' } as CreatePromoterDTO}
+        validationSchema={PromoterSchema}
         onSubmit={(values, { resetForm }) => {
-          createProvider(values, { onSuccess: () => resetForm() });
+          createPromoter(values, { onSuccess: () => resetForm() });
         }}
       >
         {({ errors }) => (
@@ -58,11 +56,20 @@ export default function AddProvider() {
                   errors={errors}
                 />
                 <Input
-                  id="contactName"
-                  name="contactName"
+                  id="address"
+                  name="address"
                   type="text"
-                  autoComplete="contactName"
-                  label="Contact"
+                  autoComplete="address"
+                  label="Address"
+                  disabled={isLoading}
+                  errors={errors}
+                />
+                <Input
+                  id="code"
+                  name="code"
+                  type="text"
+                  autoComplete="code"
+                  label="Code"
                   disabled={isLoading}
                   errors={errors}
                 />
@@ -76,29 +83,11 @@ export default function AddProvider() {
                   errors={errors}
                 />
                 <Input
-                  id="fax"
-                  name="fax"
+                  id="website"
+                  name="website"
                   type="text"
-                  autoComplete="fax"
-                  label="Fax"
-                  disabled={isLoading}
-                  errors={errors}
-                />
-                <Input
-                  id="mobileNumber"
-                  name="mobileNumber"
-                  type="text"
-                  autoComplete="mobileNumber"
-                  label="Mobile phone number"
-                  disabled={isLoading}
-                  errors={errors}
-                />
-                <Input
-                  id="email"
-                  name="email"
-                  type="text"
-                  autoComplete="email"
-                  label="Email address"
+                  autoComplete="website"
+                  label="Website"
                   disabled={isLoading}
                   errors={errors}
                 />

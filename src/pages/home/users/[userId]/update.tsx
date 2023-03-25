@@ -10,7 +10,7 @@ import { UserSchema } from '@/utils/form-schemas/user-schema';
 import { useRouter } from 'next/router';
 import { useGetUserById } from '@/hooks/useGetUserById';
 import { PageSpinner } from '@/components/PageSpinner';
-import { isValidAvatarFileType } from '@/utils/is-valid-avatar-file-type';
+import { isValidImageFileType } from '@/utils/is-valid-image-file-type';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useGetAvatarUploadUrl } from '@/hooks/useGetAvatarUploadUrl';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
@@ -90,7 +90,7 @@ export default function UpdateUser() {
             updateUser({ id: userId, ...values });
           }}
         >
-          {({ errors, setFieldValue, setFieldError, isValid }) => (
+          {({ errors, setFieldValue, setFieldError }) => (
             <Form className="space-y-8 divide-y divide-gray-200">
               <div className="space-y-8 divide-y divide-gray-200">
                 <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -162,7 +162,7 @@ export default function UpdateUser() {
                           }
 
                           setFieldValue('image', file);
-                          if (!isValidAvatarFileType(file)) {
+                          if (!isValidImageFileType(file)) {
                             return;
                           }
 

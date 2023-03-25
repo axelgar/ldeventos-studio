@@ -8,11 +8,15 @@ declare module "nextjs-routes" {
   export type Route =
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
     | StaticRoute<"/api/project/[[...params]]">
+    | StaticRoute<"/api/promoter/[[...params]]">
     | StaticRoute<"/api/provider/[[...params]]">
     | StaticRoute<"/api/user/[[...params]]">
     | StaticRoute<"/api/user-avatar/[[...params]]">
     | StaticRoute<"/home/add-project">
     | StaticRoute<"/home">
+    | DynamicRoute<"/home/promoters/[promoterId]/update", { "promoterId": string }>
+    | StaticRoute<"/home/promoters/add">
+    | StaticRoute<"/home/promoters">
     | DynamicRoute<"/home/providers/[providerId]/update", { "providerId": string }>
     | StaticRoute<"/home/providers/add">
     | StaticRoute<"/home/providers">

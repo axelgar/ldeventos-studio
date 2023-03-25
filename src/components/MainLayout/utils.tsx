@@ -31,12 +31,12 @@ export const navigation = [
     icon: FolderIcon,
     children: [
       { name: 'See projects', href: '/', pathname: INTERNAL_PREFIX, icon: FolderIcon },
-      {
-        name: 'Add new project',
-        href: '/add-project',
-        pathname: INTERNAL_PREFIX + '/add-project',
-        icon: FolderPlusIcon,
-      },
+      // {
+      //   name: 'Add new project',
+      //   href: '/add-project',
+      //   pathname: INTERNAL_PREFIX + '/add-project',
+      //   icon: FolderPlusIcon,
+      // },
       // {
       //   name: 'See project types',
       //   href: '/project-types',
@@ -96,14 +96,24 @@ export const navigation = [
       // { name: 'Settings', href: '#' },
     ],
   },
-  // {
-  //   name: 'Promoters',
-  //   icon: UserGroupIcon,
-  //   children: [
-  //     { name: 'See all promoters', href: '#' },
-  //     { name: 'Add a new promoter', href: '#' },
-  //   ],
-  // },
+  {
+    name: 'Promoters',
+    icon: UserGroupIcon,
+    children: [
+      {
+        name: 'See promoters',
+        href: '/promoters',
+        pathname: INTERNAL_PREFIX + '/promoters',
+        icon: UserGroupIcon,
+      },
+      {
+        name: 'Add a new promoter',
+        href: '/promoters/add',
+        pathname: INTERNAL_PREFIX + '/promoters/add',
+        icon: PlusIcon,
+      },
+    ],
+  },
   // {
   //   name: 'Venues',
   //   icon: BuildingOfficeIcon,

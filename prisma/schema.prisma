@@ -115,6 +115,18 @@ model Provider {
   @@map("providers")
 }
 
+model Promoter {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  logo        String?
+  address     String?
+  code        String?
+  phoneNumber String?
+  website     String?
+
+  @@map("promoters")
+}
+
 model Account {
   id                       String  @id @default(cuid())
   userId                   String

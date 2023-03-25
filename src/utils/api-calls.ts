@@ -28,4 +28,16 @@ export const apiCalls = {
   updateProviderById: { endpoint: '/api/provider', method: PUT },
   deleteProviderById: { endpoint: (providerId: string) => `/api/provider/${providerId}`, method: DELETE },
   searchProviderByName: { endpoint: (searchTerm: string) => `/api/provider/search-by-name/${searchTerm}`, method: GET },
+
+  // Promoter
+  findAllPromoters: { endpoint: '/api/promoter', method: GET },
+  getPromoterById: { endpoint: (promoterId: string) => `/api/promoter/${promoterId}`, method: GET },
+  createPromoter: { endpoint: '/api/promoter', method: POST },
+  updatePromoterById: { endpoint: '/api/promoter', method: PUT },
+  deletePromoterById: { endpoint: (promoterId: string) => `/api/promoter/${promoterId}`, method: DELETE },
+  getPromoterLogoUploadUrl: {
+    endpoint: (promoterId: string, origin: string, filename: string) =>
+      `/api/promoter/logo-upload-url/${promoterId}?origin=${encodeURI(origin)}&filename=${filename}`,
+    method: GET,
+  },
 } as const;

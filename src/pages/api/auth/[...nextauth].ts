@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 1 * 60, // 1 min (refetch is happening every 30seconds see _app.tsx)
+    maxAge: 1 * 24 * 60 * 60, // 1 day (refetch is happening every 30seconds see _app.tsx)
   },
   cookies: cookiesOptions,
   callbacks: {

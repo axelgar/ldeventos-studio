@@ -11,6 +11,6 @@ const fileTypes = [
   'image/x-icon',
 ];
 
-export const isValidAvatarFileType = (file: File) => {
+export const isValidImageFileType = (file: File) => {
   return fileTypes.includes(file.type);
 };
