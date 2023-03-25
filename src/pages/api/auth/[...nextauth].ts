@@ -17,6 +17,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 1 * 60, // 1 min (refetch is happening every 30seconds see _app.tsx)
   },
   cookies: cookiesOptions,
   callbacks: {
@@ -52,7 +53,7 @@ export const authOptions: NextAuthOptions = {
     colorScheme: 'light',
     brandColor: 'FA4D62',
     logo: 'https://www.ldeventos.com/wp-content/uploads/2014/07/logo-LD_3.png',
-    buttonText: '',
+    buttonText: 'black',
   },
 };
 

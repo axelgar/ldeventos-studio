@@ -10,7 +10,7 @@ import { ToastProvider } from '@/components/ToastProvider';
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [queryClient] = useState(() => new QueryClient(REACT_QUERY_OPTIONS));
   return (
-    <SessionProvider session={session} refetchOnWindowFocus={false}>
+    <SessionProvider session={session} refetchOnWindowFocus={false} refetchInterval={30}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <ToastProvider>
