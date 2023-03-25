@@ -44,7 +44,7 @@ class PromoterController {
     await fileStorageService.deleteFilesFromFolder(promoterId);
 
     const uploadUrl = await fileStorageService.getUploadUrlToCreateFile({
-      filename: `${promoterId}/${filename}`,
+      filename: `promoter-logos/${promoterId}/${filename}`,
       origin,
     });
     return { uploadUrl };

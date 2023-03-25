@@ -13,7 +13,7 @@ class UserAvatarController {
     await fileStorageService.deleteFilesFromFolder(userId);
 
     const uploadUrl = await fileStorageService.getUploadUrlToCreateFile({
-      filename: `${userId}/${filename}`,
+      filename: `user-avatars/${userId}/${filename}`,
       origin,
     });
     return { uploadUrl };
